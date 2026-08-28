@@ -1,0 +1,172 @@
+// =============================================================
+// FILE: src/styles/_variables.scss
+// Centralized theme variables for dark and light modes
+// =============================================================
+
+// ========= DARK THEME (Default) =========
+:root,
+[data-theme="dark"] {
+  // Core backgrounds
+  --bg-primary: #0b0f1a;
+  --bg-secondary: #111c3a;
+  --bg-tertiary: #1a0f2b;
+  --bg-surface: rgba(0, 0, 0, 0.35);
+  --bg-overlay: rgba(0, 0, 0, 0.25);
+
+  // Glass morphism
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-hover: rgba(255, 255, 255, 0.1);
+  --glass-active: rgba(255, 255, 255, 0.12);
+
+  // Borders
+  --border: rgba(255, 255, 255, 0.2);
+  --border-light: rgba(255, 255, 255, 0.12);
+  --border-focus: rgba(255, 255, 255, 0.35);
+
+  // Text colors
+  --text: #e6f1ff;
+  --text-dim: #a8b3d1;
+  --text-muted: #9fb3c8;
+  --text-inverse: #0a1722;
+
+  // Accent colors (Neon)
+  --neon: #7df9ff;
+  --neon-rgb: 125, 249, 255;
+  --neon2: #ff5cf4;
+  --neon2-rgb: 255, 92, 244;
+
+  // Status colors
+  --success: #48bb78;
+  --success-light: #86efac;
+  --error: #dc2626;
+  --error-light: #fca5a5;
+  --warning: #f59e0b;
+  --warning-light: #fde68a;
+  --info: #3b82f6;
+
+  // IDE specific
+  --ide-bg: #0a0e1a;
+  --ide-bg-lighter: #0f1629;
+  --ide-border: rgba(125, 249, 255, 0.2);
+  --ide-text: #e6f1ff;
+  --ide-text-muted: #9fb3c8;
+
+  // File explorer
+  --explorer-bg: rgba(0, 0, 0, 0.25);
+  --explorer-border: rgba(255, 255, 255, 0.12);
+  --explorer-hover: rgba(125, 249, 255, 0.06);
+  --explorer-selected: rgba(125, 249, 255, 0.12);
+  --explorer-selected-border: rgba(125, 249, 255, 0.35);
+
+  // Scrollbar
+  --scrollbar-track: rgba(0, 0, 0, 0.2);
+  --scrollbar-thumb: rgba(125, 249, 255, 0.3);
+  --scrollbar-thumb-hover: rgba(125, 249, 255, 0.5);
+
+  // Shadows
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 24px rgba(125, 249, 255, 0.25);
+  --shadow-glow2: 0 0 24px rgba(255, 92, 244, 0.25);
+
+  // Terminal
+  --terminal-bg: #0b1020;
+
+  // Context menu
+  --context-menu-bg: rgba(10, 14, 26, 0.95);
+}
+
+// ========= LIGHT THEME =========
+[data-theme="light"] {
+  // Core backgrounds - more contrast
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e2e8f0;
+  --bg-surface: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.08);
+
+  // Glass morphism (solid colors for light)
+  --glass: #ffffff;
+  --glass-hover: #f8fafc;
+  --glass-active: #f1f5f9;
+
+  // Borders - VERY visible (darker)
+  --border: rgba(0, 0, 0, 0.25);
+  --border-light: rgba(0, 0, 0, 0.18);
+  --border-focus: rgba(0, 0, 0, 0.4);
+
+  // Text colors - maximum contrast (pure dark)
+  --text: #020617;
+  --text-dim: #1e293b;
+  --text-muted: #334155;
+  --text-inverse: #ffffff;
+
+  // Accent colors - MUCH darker for excellent contrast on light bg
+  --neon: #1e3a8a;
+  --neon-rgb: 30, 58, 138;
+  --neon2: #9d174d;
+  --neon2-rgb: 157, 23, 77;
+
+  // Status colors (adjusted for light)
+  --success: #15803d;
+  --success-light: #16a34a;
+  --error: #b91c1c;
+  --error-light: #dc2626;
+  --warning: #b45309;
+  --warning-light: #d97706;
+  --info: #1d4ed8;
+
+  // IDE specific
+  --ide-bg: #f1f5f9;
+  --ide-bg-lighter: #ffffff;
+  --ide-border: rgba(30, 58, 138, 0.4);
+  --ide-text: #020617;
+  --ide-text-muted: #334155;
+
+  // File explorer
+  --explorer-bg: #ffffff;
+  --explorer-border: rgba(0, 0, 0, 0.2);
+  --explorer-hover: rgba(30, 58, 138, 0.1);
+  --explorer-selected: rgba(30, 58, 138, 0.2);
+  --explorer-selected-border: rgba(30, 58, 138, 0.6);
+
+  // Scrollbar
+  --scrollbar-track: rgba(0, 0, 0, 0.1);
+  --scrollbar-thumb: rgba(30, 58, 138, 0.5);
+  --scrollbar-thumb-hover: rgba(30, 58, 138, 0.7);
+
+  // Shadows (more visible for light mode)
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 0 3px rgba(30, 58, 138, 0.25);
+  --shadow-glow2: 0 0 0 3px rgba(157, 23, 77, 0.25);
+
+  // Terminal (light terminal theme)
+  --terminal-bg: #ffffff;
+
+  // Context menu
+  --context-menu-bg: #ffffff;
+}
+
+// ========= UTILITY MIXINS =========
+@mixin neon-glow {
+  text-shadow: 0 0 12px rgba(var(--neon-rgb), 0.6);
+}
+
+@mixin neon2-glow {
+  text-shadow: 0 0 12px rgba(var(--neon2-rgb), 0.6);
+}
+
+@mixin glass-panel {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+}
+
+@mixin focus-ring {
+  outline: none;
+  border-color: var(--neon);
+  box-shadow: 0 0 0 3px rgba(var(--neon-rgb), 0.25);
+}

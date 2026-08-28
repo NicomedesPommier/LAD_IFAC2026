@@ -1,0 +1,21 @@
+# =============================================================================
+# L.A.D. Frontend Service
+# React application service
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: lad-frontend
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: lad-frontend
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+      protocol: TCP

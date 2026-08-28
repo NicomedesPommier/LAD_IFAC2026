@@ -1,0 +1,179 @@
+[
+{
+  "model": "learning.unit",
+  "pk": "ROS",
+  "fields": {
+    "title": "ROS",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.unit",
+  "pk": "VehicleDynamics",
+  "fields": {
+    "title": "Vehicle Dynamics",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.unit",
+  "pk": "autonomous-vehicles",
+  "fields": {
+    "title": "Autonomous Vehicles",
+    "order": 3,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.level",
+  "pk": "AutonomousVehicles",
+  "fields": {
+    "unit": null,
+    "title": "Autonomous Vehicles",
+    "order": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.level",
+  "pk": "ROS-Basic",
+  "fields": {
+    "unit": "ROS",
+    "title": "ROS-Basic",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.level",
+  "pk": "gazebo-sim",
+  "fields": {
+    "unit": "autonomous-vehicles",
+    "title": "gazebo sim",
+    "order": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.level",
+  "pk": "rviz",
+  "fields": {
+    "unit": "ROS",
+    "title": "Rviz",
+    "order": 3,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.level",
+  "pk": "turtlesim",
+  "fields": {
+    "unit": "ROS",
+    "title": "Turtlesim",
+    "order": 2,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.level",
+  "pk": "vehicle-dynamics",
+  "fields": {
+    "unit": "VehicleDynamics",
+    "title": "vehicle-dynamics",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 1,
+  "fields": {
+    "level": "turtlesim",
+    "code": "TSIM_REACH_GOAL",
+    "description": "Llega a la zona meta",
+    "points": 50
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 2,
+  "fields": {
+    "level": "turtlesim",
+    "code": "TSIM_SPAWN_2ND",
+    "description": "Spawnea una segunda tortuga",
+    "points": 20
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 3,
+  "fields": {
+    "level": "ROS-Basic",
+    "code": "UndestandBasics",
+    "description": "Watch all the slides and interact with the nodes",
+    "points": 10
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 4,
+  "fields": {
+    "level": "vehicle-dynamics",
+    "code": "vd-slide-intro",
+    "description": "view slide",
+    "points": 10
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 5,
+  "fields": {
+    "level": "vehicle-dynamics",
+    "code": "vd-slide-icr",
+    "description": "view slide",
+    "points": 10
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 6,
+  "fields": {
+    "level": "vehicle-dynamics",
+    "code": "vd-slide-ackermann",
+    "description": "view slide",
+    "points": 10
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 7,
+  "fields": {
+    "level": "vehicle-dynamics",
+    "code": "vd-slide-bicycle",
+    "description": "view slide",
+    "points": 10
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 8,
+  "fields": {
+    "level": "vehicle-dynamics",
+    "code": "vd-slide-tire-forces",
+    "description": "view slide",
+    "points": 10
+  }
+},
+{
+  "model": "learning.objective",
+  "pk": 9,
+  "fields": {
+    "level": "vehicle-dynamics",
+    "code": "vd-slide-lateral",
+    "description": "view slide",
+    "points": 10
+  }
+}
+]

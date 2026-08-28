@@ -1,0 +1,66 @@
+# =============================================================================
+# L.A.D. ConfigMap
+# Centralized configuration for all components
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lad-config
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: config
+data:
+  # ===== Environment =====
+  NODE_ENV: "production"
+  DJANGO_DEBUG: "false"
+
+  # ===== Ports =====
+  FRONTEND_PORT: "3000"
+  BACKEND_PORT: "8000"
+  ROS_BRIDGE_PORT: "9090"
+  ROS_STATIC_PORT: "7000"
+  ROS_WVS_PORT: "8080"
+  ROS_UNITY_PORT: "10000"
+
+  # ===== API Configuration =====
+  # These will be overridden by the ingress/service configuration
+  REACT_APP_API_BASE: "/api"
+
+  # ===== ROS Configuration =====
+  ENABLE_JSP: "1"
+  ENABLE_ROSAPI: "1"
+  ENABLE_WVS: "1"
+  ENABLE_TURTLESIM: "1"
+  ENABLE_GAZEBO: "1"
+  ENABLE_DUMMY_CAMERAS: "0"
+  ENABLE_UNITY_TCP: "1"
+  UNITY_TCP_PORT: "10000"
+  GAZEBO_WORLD: "/ros2_ws/src/qcar_bringup/worlds/simple_track.world"
+
+  # ===== Database =====
+  # For production, use PostgreSQL via secrets
+  # DATABASE_ENGINE: "django.db.backends.postgresql"
+  # DATABASE_NAME: "lad"
+
+  # ===== CORS Configuration =====
+  # Will be dynamically set based on ingress host
+  # CORS_ALLOWED_ORIGINS: "https://lad.example.com"
+
+---
+# =============================================================================
+# L.A.D. IP Configuration (mounted as file)
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lad-ip-config
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: config
+data:
+  ip_config.json: |
+    {
+      "exposed_ip": "lad-ros-service"
+    }

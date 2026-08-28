@@ -1,0 +1,317 @@
+// components/ide/IDETutorial.scss
+// Overrides for driver.js popover — neon dark theme
+
+// ─── Popover card ────────────────────────────────────────────────────────────
+
+.driver-popover.ide-tutorial {
+  background: linear-gradient(135deg, rgba(12, 20, 38, 0.98) 0%, rgba(6, 14, 30, 0.98) 100%);
+  border: 1.5px solid var(--neon, #7df9ff);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 40px rgba(125, 249, 255, 0.18);
+  backdrop-filter: blur(12px);
+  padding: 0;
+  min-width: 300px;
+  max-width: 440px;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: inherit;
+
+  // Arrow inherits border color
+  .driver-popover-arrow {
+    border-color: var(--neon, #7df9ff) transparent transparent transparent;
+  }
+}
+
+// ─── Title ───────────────────────────────────────────────────────────────────
+
+.driver-popover.ide-tutorial .driver-popover-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--neon, #7df9ff);
+  text-shadow: 0 0 10px rgba(125, 249, 255, 0.25);
+  padding: 1rem 2.5rem 0 1.25rem; // right padding for close btn
+  margin: 0;
+  line-height: 1.35;
+  display: block;
+}
+
+// ─── Close button ────────────────────────────────────────────────────────────
+
+.driver-popover.ide-tutorial .driver-popover-close-btn {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1.1rem;
+  top: 0.75rem;
+  right: 0.75rem;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+// ─── Description ─────────────────────────────────────────────────────────────
+
+.driver-popover.ide-tutorial .driver-popover-description {
+  padding: 0.5rem 1.25rem 0;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
+
+  .idt-text {
+    display: block;
+    white-space: pre-line;
+    margin-bottom: 0.5rem;
+  }
+
+  .idt-warning {
+    padding: 0.55rem 0.85rem;
+    background: rgba(255, 190, 0, 0.08);
+    border-left: 3px solid rgba(255, 190, 0, 0.75);
+    border-radius: 4px;
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.88);
+    margin-top: 0.5rem;
+  }
+
+  .idt-tip {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.5rem 0.85rem;
+    background: rgba(125, 249, 255, 0.07);
+    border-left: 3px solid var(--neon, #7df9ff);
+    border-radius: 4px;
+    font-size: 0.84rem;
+    font-family: "Fira Code", "Consolas", monospace;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 0.5rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .idt-tip-label {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--neon, #7df9ff);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+
+.driver-popover.ide-tutorial .driver-popover-footer {
+  padding: 0.75rem 1.25rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+// ─── Progress text ───────────────────────────────────────────────────────────
+
+.driver-popover.ide-tutorial .driver-popover-progress-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0.15rem 0.55rem;
+  border-radius: 10px;
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+
+.driver-popover.ide-tutorial .driver-popover-footer button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-shadow: none;
+  border: 1.5px solid transparent;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.13);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Next / Done button
+.driver-popover.ide-tutorial .driver-popover-next-btn {
+  background: var(--neon, #7df9ff) !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 3px 10px rgba(125, 249, 255, 0.28);
+
+  &:hover {
+    background: #a8faff !important;
+    box-shadow: 0 5px 14px rgba(125, 249, 255, 0.4);
+  }
+}
+
+// Previous button
+.driver-popover.ide-tutorial .driver-popover-prev-btn {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+}
+
+// ─── Overlay ─────────────────────────────────────────────────────────────────
+
+#driver-highlighted-element-stage {
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px rgba(125, 249, 255, 0.65) !important;
+}
+
+// Re-enable pointer events on the ReactFlow canvas so drag-and-drop still works
+// while the tutorial overlay is active. The driver.js CSS blanket-disables
+// pointer-events on everything except the highlighted element.
+.driver-active {
+  .react-flow__pane,
+  .react-flow__renderer,
+  .react-flow__viewport,
+  .react-flow__nodes,
+  .react-flow__edges,
+  [data-testid="rf__wrapper"] {
+    pointer-events: auto !important;
+  }
+}
+
+// ─── Resume button ───────────────────────────────────────────────────────────
+// Shown whenever the tour is NOT active (driver.js removes body.driver-active on destroy)
+
+.ide-tutorial__reopen-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem 0.5rem 0.6rem;
+  background: linear-gradient(135deg, rgba(12, 20, 38, 0.96) 0%, rgba(6, 14, 30, 0.96) 100%);
+  border: 1.5px solid var(--neon, #7df9ff);
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 20px rgba(125, 249, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 28px rgba(125, 249, 255, 0.28);
+    transform: translateY(-2px);
+    border-color: #a8faff;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.ide-tutorial__reopen-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--neon, #7df9ff);
+  color: #000;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.ide-tutorial__reopen-label {
+  color: var(--neon, #7df9ff);
+  white-space: nowrap;
+}
+
+// Hide the button while the tour is running
+body.driver-active .ide-tutorial__reopen-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+// ─── SweetAlert2 appears above driver overlay ────────────────────────────────
+
+.swal2-container {
+  z-index: 10002 !important;
+}
+
+// ─── Light theme overrides ───────────────────────────────────────────────────
+
+.light-theme .driver-popover.ide-tutorial {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 246, 252, 0.98) 100%);
+  border-color: #5c9cff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 40px rgba(92, 156, 255, 0.15);
+  color: rgba(0, 0, 0, 0.82);
+
+  .driver-popover-title {
+    color: #0055cc;
+    text-shadow: none;
+  }
+
+  .driver-popover-description {
+    color: rgba(0, 0, 0, 0.82);
+
+    .idt-tip {
+      background: rgba(92, 156, 255, 0.08);
+      border-color: #5c9cff;
+      color: rgba(0, 0, 0, 0.85);
+    }
+
+    .idt-tip-label { color: #0055cc; }
+
+    .idt-warning {
+      background: rgba(200, 140, 0, 0.07);
+      border-color: rgba(200, 140, 0, 0.7);
+      color: rgba(0, 0, 0, 0.82);
+    }
+  }
+
+  .driver-popover-footer button {
+    background: rgba(0, 0, 0, 0.04);
+    color: rgba(0, 0, 0, 0.8);
+
+    &:hover { background: rgba(0, 0, 0, 0.08); }
+  }
+
+  .driver-popover-next-btn {
+    background: #5c9cff !important;
+    color: #fff !important;
+  }
+
+  .driver-popover-prev-btn {
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .driver-popover-progress-text {
+    color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .driver-popover-close-btn {
+    color: rgba(0, 0, 0, 0.35);
+    &:hover { color: rgba(0, 0, 0, 0.65); }
+  }
+}

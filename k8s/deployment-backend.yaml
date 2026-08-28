@@ -1,0 +1,151 @@
+# =============================================================================
+# L.A.D. Backend Deployment
+# Django REST API with JWT authentication
+# =============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lad-backend
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: backend
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: lad-backend
+  template:
+    metadata:
+      labels:
+        app: lad-backend
+        app.kubernetes.io/name: lad
+        app.kubernetes.io/component: backend
+      annotations:
+        checksum/config: "{{ include (print $.Template.BasePath \"/configmap.yaml\") . | sha256sum }}"
+    spec:
+      # Security context for pod
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+
+      # Init container to set up directories
+      initContainers:
+        - name: init-dirs
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /app/data /app/static_collected /app/static/images
+              chown -R 1001:1001 /app/data /app/static_collected /app/static
+          volumeMounts:
+            - name: backend-data
+              mountPath: /app/data
+            - name: backend-static
+              mountPath: /app/static_collected
+          securityContext:
+            runAsUser: 0
+
+      containers:
+        - name: backend
+          image: sapetor/lad-backend:latest
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+
+          # Environment from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: lad-config
+
+          # Environment from Secrets
+          env:
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: lad-secrets
+                  key: DJANGO_SECRET_KEY
+            - name: DJANGO_DEBUG
+              value: "false"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "localhost,lad-backend,lad-backend.lad.svc.cluster.local,*"
+
+          # Resource limits
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          # Security context for container
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+          # Volume mounts
+          volumeMounts:
+            - name: backend-data
+              mountPath: /app/data
+            - name: backend-static
+              mountPath: /app/static_collected
+            - name: ip-config
+              mountPath: /config
+              readOnly: true
+
+          # Probes
+          livenessProbe:
+            httpGet:
+              path: /api/health/
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /api/health/
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          startupProbe:
+            httpGet:
+              path: /api/health/
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 12
+
+      volumes:
+        - name: backend-data
+          persistentVolumeClaim:
+            claimName: lad-backend-data-pvc
+        - name: backend-static
+          persistentVolumeClaim:
+            claimName: lad-backend-static-pvc
+        - name: ip-config
+          configMap:
+            name: lad-ip-config
+
+      # Image pull secrets for private registry
+      # imagePullSecrets:
+      #   - name: gitlab-registry-secret

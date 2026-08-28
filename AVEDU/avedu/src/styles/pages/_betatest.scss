@@ -1,0 +1,273 @@
+// =============================================================
+// FILE: src/styles/pages/_betatest.scss
+// Beta-test mission board. Relies on global .screen/.title/.start/.footer
+// (from _home.scss). Uses the shared --neon theme variable with fallbacks.
+// =============================================================
+
+$neon: var(--neon, #7df9ff);
+
+.beta {
+  &__home {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    background: transparent;
+    border: 1px solid rgba(125, 249, 255, 0.4);
+    color: $neon;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      background: rgba(125, 249, 255, 0.12);
+      box-shadow: 0 0 12px rgba(125, 249, 255, 0.25);
+    }
+  }
+
+  &__content {
+    width: min(760px, 92vw);
+    margin-inline: auto;
+  }
+
+  // ── Progress HUD ──────────────────────────────────────────────────────────
+  &__hud {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.25rem 0 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__hud-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 64px;
+  }
+
+  &__hud-num {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: $neon;
+    line-height: 1.1;
+
+    small {
+      font-size: 0.75rem;
+      opacity: 0.55;
+      font-weight: 600;
+    }
+  }
+
+  &__hud-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+  }
+
+  &__progressbar {
+    flex: 1;
+    min-width: 140px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(125, 249, 255, 0.1);
+    border: 1px solid rgba(125, 249, 255, 0.25);
+    overflow: hidden;
+  }
+
+  &__progressbar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(125, 249, 255, 0.5), #00ff88);
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+    transition: width 0.5s ease;
+  }
+
+  &__results {
+    margin: 1rem 0;
+    padding: 0.9rem 1.1rem;
+    border-radius: 12px;
+    text-align: center;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.45);
+    color: #d7ffe9;
+  }
+
+  // ── Mission list ──────────────────────────────────────────────────────────
+  &__missions {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  &__reset {
+    margin: 1.25rem auto 0;
+    display: block;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.78rem;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover { color: #ff6b6b; }
+  }
+}
+
+// ── Mission card ──────────────────────────────────────────────────────────────
+.beta-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(10, 18, 32, 0.66);
+  border: 1px solid rgba(125, 249, 255, 0.16);
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+
+  &__icon { font-size: 1.5rem; line-height: 1; }
+
+  &__index {
+    width: 26px;
+    height: 26px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.85rem;
+    background: rgba(125, 249, 255, 0.12);
+    border: 1px solid rgba(125, 249, 255, 0.35);
+    color: $neon;
+  }
+
+  &__body { flex: 1; min-width: 0; }
+  &__title { font-weight: 700; }
+  &__blurb { font-size: 0.82rem; opacity: 0.68; }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    flex: 0 0 auto;
+  }
+
+  &__points {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #ffd166;
+  }
+
+  &__state {
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.65;
+
+    &--go { color: $neon; opacity: 1; }
+    &--done { color: #00ff88; opacity: 1; }
+  }
+
+  // States
+  &--available,
+  &--active {
+    cursor: pointer;
+    border-color: rgba(125, 249, 255, 0.5);
+    box-shadow: 0 0 0 1px rgba(125, 249, 255, 0.08), 0 6px 20px rgba(0, 0, 0, 0.35);
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: $neon;
+      box-shadow: 0 0 18px rgba(125, 249, 255, 0.28);
+    }
+  }
+
+  &--active { border-color: #00ff88; }
+
+  &--done { opacity: 0.85; border-color: rgba(0, 255, 136, 0.35); }
+
+  &--locked,
+  &--soon { opacity: 0.45; filter: grayscale(0.4); }
+}
+
+// ── Explanation modal ─────────────────────────────────────────────────────────
+.beta-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(3px);
+  padding: 1rem;
+
+  &__panel {
+    position: relative;
+    width: min(520px, 94vw);
+    background: var(--bg-surface, #0f1929);
+    border: 1px solid rgba(125, 249, 255, 0.28);
+    border-radius: 18px;
+    padding: 1.5rem 1.5rem 1.25rem;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(125, 249, 255, 0.08);
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover { color: #fff; }
+  }
+
+  &__icon { font-size: 2.2rem; }
+
+  &__title {
+    margin: 0.4rem 0 0.2rem;
+    font-size: 1.15rem;
+  }
+
+  &__heading {
+    margin: 0.6rem 0 0.4rem;
+    font-size: 0.95rem;
+    color: $neon;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__body {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    opacity: 0.9;
+  }
+
+  &__footer {
+    margin-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__points {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffd166;
+  }
+}

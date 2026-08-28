@@ -1,0 +1,34 @@
+# Dependencies
+avedu/node_modules
+node_modules
+
+# Build output (we build inside Docker)
+avedu/build
+
+# Development files
+avedu/.env.local
+avedu/.env.development.local
+avedu/.env.test.local
+avedu/.env.production.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+!README.md

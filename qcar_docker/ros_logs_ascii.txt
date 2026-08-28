@@ -1,0 +1,100 @@
+ros-1  | [robot_state_publisher-4] [INFO] [1774195117.001530094] [robot_state_publisher]: got segment right_rear_axle_carrier
+ros-1  | [robot_state_publisher-4] [INFO] [1774195117.001538821] [robot_state_publisher]: got segment right_rear_wheel
+ros-1  | [robot_state_publisher-4] [INFO] [1774195117.001547127] [robot_state_publisher]: got segment right_steering_link
+ros-1  | [ros2-2] [INFO] [launch]: All log files can be found below /root/.ros/log/2026-03-22-15-58-37-285485-e7cf27300340-66
+ros-1  | [ros2-2] [INFO] [launch]: Default logging verbosity is set to INFO
+ros-1  | [compressed_republisher-8] [INFO] [1774195117.426267526] [compressed_republisher]: Republishing /qcar/rgb/image_color -> /qcar/rgb/image_color/compressed (quality=85)
+ros-1  | [compressed_republisher-8] [INFO] [1774195117.428967075] [compressed_republisher]: Republishing /qcar/csi_front/image_raw -> /qcar/csi_front/image_raw/compressed (quality=85)
+ros-1  | [compressed_republisher-8] [INFO] [1774195117.431834939] [compressed_republisher]: Republishing /qcar/csi_right/image_raw -> /qcar/csi_right/image_raw/compressed (quality=85)
+ros-1  | [compressed_republisher-8] [INFO] [1774195117.434489279] [compressed_republisher]: Republishing /qcar/csi_back/image_raw -> /qcar/csi_back/image_raw/compressed (quality=85)
+ros-1  | [joint_state_publisher-5] [INFO] [1774195117.435184063] [joint_state_publisher]: Waiting for robot_description to be published on the robot_description topic...
+ros-1  | [compressed_republisher-8] [INFO] [1774195117.436817197] [compressed_republisher]: Republishing /qcar/csi_left/image_raw -> /qcar/csi_left/image_raw/compressed (quality=85)
+ros-1  | [compressed_republisher-8] [INFO] [1774195117.439370391] [compressed_republisher]: Republishing /qcar/overhead/image_raw -> /qcar/overhead/image_raw/compressed (quality=85)
+ros-1  | [web_video_server-7] [INFO] [1774195117.464300824] [web_video_server]: Waiting For connections on 0.0.0.0:8080
+ros-1  | [ros2-2] [INFO] [rosbridge_websocket-1]: process started with pid [149]
+ros-1  | [ros2-2] [INFO] [rosapi_node-2]: process started with pid [151]
+ros-1  | [spawn_entity.py-10] [INFO] [1774195117.496186507] [spawn_entity]: Spawn Entity started
+ros-1  | [spawn_entity.py-10] [INFO] [1774195117.496747172] [spawn_entity]: Loading entity XML from file /ros2_ws/install/qcar_description/share/qcar_description/urdf/robot_gazebo.urdf
+ros-1  | [spawn_entity.py-10] [INFO] [1774195117.499723026] [spawn_entity]: Waiting for service /spawn_entity, timeout = 120
+ros-1  | [spawn_entity.py-10] [INFO] [1774195117.500186926] [spawn_entity]: Waiting for service /spawn_entity
+ros-1  | [gzserver-9] Gazebo multi-robot simulator, version 11.10.2
+ros-1  | [gzserver-9] Copyright (C) 2012 Open Source Robotics Foundation.
+ros-1  | [gzserver-9] Released under the Apache 2 License.
+ros-1  | [gzserver-9] http://gazebosim.org
+ros-1  | [gzserver-9] 
+ros-1  | [gzserver-9] [1;33m[Wrn] [gazebo_ros_init.cpp:178] [0m[1;33m
+ros-1  | [gzserver-9] #     # ####### ####### ###  #####  #######
+ros-1  | [gzserver-9] ##    # #     #    #     #  #     # #
+ros-1  | [gzserver-9] # #   # #     #    #     #  #       #
+ros-1  | [gzserver-9] #  #  # #     #    #     #  #       #####
+ros-1  | [gzserver-9] #   # # #     #    #     #  #       #
+ros-1  | [gzserver-9] #    ## #     #    #     #  #     # #
+ros-1  | [gzserver-9] #     # #######    #    ###  #####  #######
+ros-1  | [gzserver-9] 
+ros-1  | [gzserver-9] This version of Gazebo, now called Gazebo classic, reaches end-of-life
+ros-1  | [gzserver-9] in January 2025. Users are highly encouraged to migrate to the new Gazebo
+ros-1  | [gzserver-9] using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration?utm_source=gazebo_ros_pkgs&utm_medium=cli)
+ros-1  | [gzserver-9] 
+ros-1  | [gzserver-9] [0m[1;33m
+ros-1  | [gzserver-9] [1;32m[Msg] [0m[1;32mWaiting for master.[0m[1;32m
+ros-1  | [gzserver-9] [0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mConnected to gazebo master @ [0m[1;32mhttp://127.0.0.1:11345[0m[1;32m
+ros-1  | [gzserver-9] [0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mPublicized address: [0m[1;32m172.18.0.2[0m[1;32m
+ros-1  | [gzserver-9] [0m[1;33m[0m[1;33m[0m[1;33m[Wrn] [ModelDatabase.cc:340] [0m[1;33mGetting models from[[0m[1;33m/[0m[1;33m]. This may take a few seconds.
+ros-1  | [gzserver-9] [0m[1;33m[Wrn] [ModelDatabase.cc:212] [0m[1;33mUnable to connect to model database using [[0m[1;33m//database.config[0m[1;33m]. Only locally installed models will be available.
+ros-1  | [gzserver-9] [0m[1;33m[Wrn] [FuelModelDatabase.cc:313] [0m[1;33mURI not supported by Fuel [[0m[1;33mmodel://sun[0m[1;33m][0m[1;33m
+ros-1  | [gzserver-9] [0m[1;33m[0m[1;33m[0m[1;33m[Wrn] [SystemPaths.cc:459] [0m[1;33mFile or path does not exist [[0m[1;33m""[0m[1;33m] [[0m[1;33mmodel://sun[0m[1;33m][0m[1;33m
+ros-1  | [gzserver-9] [0m[1;33m[0m[1;33m[0m[1;33m[Wrn] [ModelDatabase.cc:340] [0m[1;33mGetting models from[[0m[1;33m/[0m[1;33m]. This may take a few seconds.
+ros-1  | [gzserver-9] [0m[1;33m[Wrn] [ModelDatabase.cc:212] [0m[1;33mUnable to connect to model database using [[0m[1;33m//database.config[0m[1;33m]. Only locally installed models will be available.
+ros-1  | [gzserver-9] [0m[1;33m[Wrn] [FuelModelDatabase.cc:313] [0m[1;33mURI not supported by Fuel [[0m[1;33mmodel://ground_plane[0m[1;33m][0m[1;33m
+ros-1  | [gzserver-9] [0m[1;33m[0m[1;33m[0m[1;33m[Wrn] [SystemPaths.cc:459] [0m[1;33mFile or path does not exist [[0m[1;33m""[0m[1;33m] [[0m[1;33mmodel://ground_plane[0m[1;33m][0m[1;33m
+ros-1  | [ros2-2] [rosbridge_websocket-1] [WARN] [1774195118.382357140] [rosbridge_websocket]: The 'default_call_service_timeout' parameter is currently set to 0.0, which means service calls will block indefinitely if no response is received. Please note that in the Jazzy and later releases, the default value for this parameter will be updated to 5.0 seconds.
+ros-1  | [ros2-2] [rosbridge_websocket-1] [WARN] [1774195118.383017594] [rosbridge_websocket]: The 'call_services_in_new_thread' parameter is currently set to False, which means service calls will block the main thread. Please note that in the Jazzy and later releases, the default value for this parameter will be updated to True.
+ros-1  | [ros2-2] [rosbridge_websocket-1] [WARN] [1774195118.383440426] [rosbridge_websocket]: The 'send_action_goals_in_new_thread' parameter is currently set to False, which means sending action goals will block the main thread. Please note that in the Jazzy and later releases, the default value for this parameter will be updated to True.
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195118.385487710] [rosbridge_websocket]: Rosbridge WebSocket server started on port 9090
+ros-1  | [gzserver-9] [0m[1;33m[0m[1;33m[0mError Code 12 Msg: Unable to find uri[model://sun]
+ros-1  | [gzserver-9] Error Code 12 Msg: Unable to find uri[model://ground_plane]
+ros-1  | [gzserver-9] ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ros-1  | [gzserver-9] ALSA lib conf.c:5178:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ros-1  | [gzserver-9] ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ros-1  | [gzserver-9] ALSA lib conf.c:5178:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ros-1  | [gzserver-9] ALSA lib confmisc.c:1334:(snd_func_refer) error evaluating name
+ros-1  | [gzserver-9] ALSA lib conf.c:5178:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ros-1  | [gzserver-9] ALSA lib conf.c:5701:(snd_config_expand) Evaluate error: No such file or directory
+ros-1  | [gzserver-9] ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM default
+ros-1  | [gzserver-9] AL lib: (EE) ALCplaybackAlsa_open: Could not open playback device 'default': No such file or directory
+ros-1  | [gzserver-9] [1;31m[Err] [OpenAL.cc:84] [0m[1;31mUnable to open audio device[[0m[1;31mdefault[0m[1;31m]
+ros-1  | [gzserver-9]  Audio will be disabled.
+ros-1  | [gzserver-9] [0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mLoading world file [[0m[1;32m/worlds/qcar_lidar_test.world[0m[1;32m][0m[1;32m
+ros-1  | [spawn_entity.py-10] [INFO] [1774195118.540538148] [spawn_entity]: Calling service /spawn_entity
+ros-1  | [gzserver-9] [0m[INFO] [1774195118.595705135] [gazebo.gazebo_ros_state]: Publishing states of gazebo models at [/gazebo/model_states]
+ros-1  | [gzserver-9] [INFO] [1774195118.596927806] [gazebo.gazebo_ros_state]: Publishing states of gazebo links at [/gazebo/link_states]
+ros-1  | [gzserver-9] [1;31m[Err] [World.cc:1803] [0m[1;31mWorld[[0m[1;31mqcar_lidar_test[0m[1;31m] is attempting to load [0m[1;31ma plugin, but detected an incorrect plugin type. [0m[1;31mPlugin filename[[0m[1;31mlibgazebo_ros_factory.so[0m[1;31m] name[[0m[1;31mgazebo_ros_factory[0m[1;31m]
+ros-1  | [gzserver-9] [0m[INFO] [1774195119.881750548] [qcar.camera_csi_back_controller]: Publishing camera info to [/qcar/csi_back/camera_info]
+ros-1  | [gzserver-9] [INFO] [1774195120.329860147] [qcar.camera_csi_front_controller]: Publishing camera info to [/qcar/csi_front/camera_info]
+ros-1  | [gzserver-9] [INFO] [1774195120.593627187] [qcar.camera_csi_left_controller]: Publishing camera info to [/qcar/csi_left/camera_info]
+ros-1  | [gzserver-9] [INFO] [1774195120.836561426] [qcar.camera_csi_right_controller]: Publishing camera info to [/qcar/csi_right/camera_info]
+ros-1  | [gzserver-9] [INFO] [1774195120.927142930] [qcar.camera_controller]: Publishing camera info to [/qcar/rgb/camera_info]
+ros-1  | [spawn_entity.py-10] [INFO] [1774195120.937880793] [spawn_entity]: Spawn status: SpawnEntity: Successfully spawned entity [qcar]
+ros-1  | [gzserver-9] [INFO] [1774195121.075515767] [qcar.differential_drive_controller]: Wheel pair 1 separation set to [0.112000m]
+ros-1  | [gzserver-9] [INFO] [1774195121.075609725] [qcar.differential_drive_controller]: Wheel pair 1 diameter set to [0.053000m]
+ros-1  | [gzserver-9] [INFO] [1774195121.077783021] [qcar.differential_drive_controller]: Subscribed to [/qcar/cmd_vel]
+ros-1  | [gzserver-9] [INFO] [1774195121.083253216] [qcar.differential_drive_controller]: Advertise odometry on [/qcar/odom]
+ros-1  | [gzserver-9] [INFO] [1774195121.087978757] [qcar.differential_drive_controller]: Publishing odom transforms between [odom] and [base_link]
+ros-1  | [INFO] [spawn_entity.py-10]: process has finished cleanly [pid 82]
+ros-1  | [gzserver-9] [1;33m[Wrn] [Publisher.cc:135] [0m[1;33mQueue limit reached for topic [0m[1;33m/gazebo/qcar_lidar_test/pose/local/info[0m[1;33m, deleting message. [0m[1;33mThis warning is printed only once.[0m[1;33m
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195165.681338471] [rosbridge_websocket]: Calling services in existing thread
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195165.682810811] [rosbridge_websocket]: Sending action goals in existing thread
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195165.691244819] [rosbridge_websocket]: Client connected. 1 clients total.
+ros-1  | [gzserver-9] [0m[1;33m[0m[1;33m[0m[1;33m[Wrn] [Publisher.cc:135] [0m[1;33mQueue limit reached for topic [0m[1;33m/gazebo/qcar_lidar_test/physics/contacts[0m[1;33m, deleting message. [0m[1;33mThis warning is printed only once.[0m[1;33m
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195423.235795570] [rosbridge_websocket]: [Client 5ebe774d-cadd-4f22-be34-90d4015cb4db] Subscribed to /scan
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195423.239143506] [rosbridge_websocket]: [Client 5ebe774d-cadd-4f22-be34-90d4015cb4db] Subscribed to /camera/image/compressed
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195423.241891647] [rosbridge_websocket]: [Client 5ebe774d-cadd-4f22-be34-90d4015cb4db] Unsubscribed from /scan
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195423.243970610] [rosbridge_websocket]: [Client 5ebe774d-cadd-4f22-be34-90d4015cb4db] Unsubscribed from /camera/image/compressed
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195423.257547689] [rosbridge_websocket]: [Client 5ebe774d-cadd-4f22-be34-90d4015cb4db] Subscribed to /scan
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195423.260655660] [rosbridge_websocket]: [Client 5ebe774d-cadd-4f22-be34-90d4015cb4db] Subscribed to /camera/image/compressed
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195693.238640800] [rosbridge_websocket]: Client disconnected. 0 clients total.
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195695.470844363] [rosbridge_websocket]: Calling services in existing thread
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195695.472488657] [rosbridge_websocket]: Sending action goals in existing thread
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195695.477693300] [rosbridge_websocket]: Client connected. 1 clients total.
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195684.160542529] [rosbridge_websocket]: [Client b8f3be2a-8168-4b91-8808-5e1fce798617] Subscribed to /scan
+ros-1  | [ros2-2] [rosbridge_websocket-1] [INFO] [1774195684.169902330] [rosbridge_websocket]: [Client b8f3be2a-8168-4b91-8808-5e1fce798617] Subscribed to /camera/image/compressed

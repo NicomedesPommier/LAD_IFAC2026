@@ -1,0 +1,134 @@
+// ROS Subscriber Node Styles
+.ros-subscriber-node {
+  min-width: 320px;
+  max-width: 400px;
+  background: linear-gradient(135deg, rgba(100, 150, 255, 0.1) 0%, rgba(50, 100, 200, 0.05) 100%);
+  border: 2px solid rgba(100, 150, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(100, 150, 255, 0.15);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(100, 150, 255, 0.15);
+    border-bottom: 1px solid rgba(100, 150, 255, 0.2);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(100, 150, 255, 0.25);
+    }
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+  }
+
+  &__toggle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    transition: transform 0.2s ease;
+
+    &--expanded {
+      transform: rotate(0deg);
+    }
+
+    &--collapsed {
+      transform: rotate(-90deg);
+    }
+  }
+
+  &__body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__field-collapsible {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    &--collapsed {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  &__field-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  &__field-input-wrapper {
+    width: 100%;
+  }
+
+  &__grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  &__message-preview {
+    padding: 0.75rem;
+    background: rgba(100, 150, 255, 0.1);
+    border: 1px solid rgba(100, 150, 255, 0.3);
+    border-radius: 6px;
+    margin-top: 0.5rem;
+  }
+
+  &__message-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  &__message-content {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-radius: 4px;
+    word-break: break-all;
+    max-height: 80px;
+    overflow-y: auto;
+  }
+
+  &__info-panel {
+    padding: 0.75rem;
+    background: rgba(100, 150, 255, 0.08);
+    border: 1px solid rgba(100, 150, 255, 0.2);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  &__info-title {
+    font-weight: 700;
+    color: #6496ff;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  &__info-line {
+    color: var(--text-secondary);
+    margin: 0.25rem 0;
+    font-size: 0.85rem;
+
+    &:before {
+      content: "• ";
+      color: #6496ff;
+    }
+  }
+}

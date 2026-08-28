@@ -1,0 +1,47 @@
+# Python
+lad/__pycache__
+lad/**/__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+
+# Virtual environment
+.venv
+venv
+ENV
+
+# Database (SQLite - we'll use mounted volume or PostgreSQL)
+lad/db.sqlite3
+lad/*.sqlite3
+
+# Static files (collected during build)
+lad/static_collected
+
+# Development files
+.env
+.env.local
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+
+# Tests
+lad/htmlcov
+lad/.coverage
+lad/.pytest_cache

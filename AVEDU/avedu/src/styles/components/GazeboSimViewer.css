@@ -1,0 +1,192 @@
+.gazebo-sim-viewer {
+  width: 100%;
+  height: 100%;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.gazebo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #444;
+}
+
+.gazebo-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #4CAF50;
+}
+
+.connection-status {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.connection-status.success {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.connection-status.error {
+  background-color: #f44336;
+  color: white;
+}
+
+.gazebo-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.camera-section {
+  grid-column: 1 / -1;
+  background-color: #2d2d2d;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #4CAF50;
+}
+
+.camera-selector {
+  padding: 8px 12px;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.camera-selector:hover {
+  border-color: #4CAF50;
+}
+
+.camera-view {
+  width: 100%;
+  background-color: #000;
+  border-radius: 4px;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-view img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.no-image,
+.no-data {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 40px;
+}
+
+.lidar-section {
+  background-color: #2d2d2d;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.lidar-section h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #4CAF50;
+}
+
+.lidar-canvas {
+  width: 100%;
+  height: auto;
+  background-color: #000;
+  border-radius: 4px;
+  display: block;
+}
+
+.odometry-section {
+  background-color: #2d2d2d;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.odometry-section h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #4CAF50;
+}
+
+.odom-data {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.odom-group {
+  background-color: #1e1e1e;
+  padding: 12px;
+  border-radius: 4px;
+  border-left: 3px solid #4CAF50;
+}
+
+.odom-group h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.odom-group p {
+  margin: 5px 0;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  color: #ddd;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .gazebo-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .gazebo-sim-viewer {
+    padding: 10px;
+  }
+
+  .gazebo-header h2 {
+    font-size: 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .camera-view {
+    min-height: 250px;
+  }
+}

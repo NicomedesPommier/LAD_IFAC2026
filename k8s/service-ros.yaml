@@ -1,0 +1,39 @@
+# =============================================================================
+# L.A.D. ROS Service
+# ROS 2 with rosbridge WebSocket service
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: lad-ros
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: ros
+spec:
+  type: ClusterIP
+  # Session affinity is CRITICAL for WebSocket connections to work correctly
+  # This ensures clients always connect to the same pod
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800  # 3 hours
+  selector:
+    app: lad-ros
+  ports:
+    - name: rosbridge
+      port: 9090
+      targetPort: rosbridge
+      protocol: TCP
+    - name: static
+      port: 7000
+      targetPort: static
+      protocol: TCP
+    - name: wvs
+      port: 8080
+      targetPort: wvs
+      protocol: TCP
+    - name: unity
+      port: 10000
+      targetPort: unity
+      protocol: TCP

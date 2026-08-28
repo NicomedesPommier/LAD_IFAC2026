@@ -1,0 +1,100 @@
+# --- Raíz del repo L.A.D ---
+
+# VS Code
+.vscode/
+
+# Archivos de entorno (en cualquier subcarpeta)
+**/.env
+**/.env.*
+# ...pero los templates SÍ se versionan
+!**/.env.example
+
+# Python (cualquier carpeta)
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/venv/
+
+# Node (cualquier carpeta)
+**/node_modules/
+**/coverage/
+
+# ROS2 / colcon (artefactos y logs en cualquier carpeta)
+**/build/
+**/install/
+**/log/
+.colcon/
+
+# SO / otros
+.DS_Store
+Thumbs.db
+
+# Side projects
+LAD V2/
+
+# Windows reserved names
+nul
+
+# --- Secretos y config por despliegue ----------------------------------------
+# NUNCA versionar: contienen IPs reales de LAN/robot y credenciales.
+config/ip_config.json
+*.pem
+*.key
+id_rsa*
+secrets.local.*
+
+# --- Media pesada / capturas de depuración -----------------------------------
+# Videos y grabaciones de pantalla: no son necesarios para ejecutar la app.
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+# Capturas de errores en la raíz del repo (depuración, no código)
+/*.png
+/*.jpg
+/*.jpeg
+/cmd_out.txt
+/test.txt
+# Copia suelta del build de Unity en la raíz (el real vive en
+# AVEDU/avedu/public/unity-games/)
+/RickTest/
+
+# Builds de Unity WebGL: los binarios (Build/) se distribuyen aparte
+AVEDU/avedu/public/unity-games/**/Build/
+AVEDU/avedu/public/unity-games/**/StreamingAssets/
+
+# --- Bases de datos y artefactos locales -------------------------------------
+*.sqlite3
+*.sqlite3-journal
+*.log
+
+# Local Claude / agent files
+.claude/settings.local.json
+.claude/settings.local.json.backup
+.claude/project-context.md
+*.backup
+
+# --- Notas internas de desarrollo --------------------------------------------
+# Solo README.md (y los README de terceros) se versionan. El resto de notas,
+# resúmenes de implementación y guías de troubleshooting son locales.
+/BETA_AND_METRICS_PLAN.md
+/CLAUDE.md
+/DJANGO_MESH_API_GUIDE.md
+/FIX_ENTRY_POINTS_ERROR.md
+/IMPLEMENTATION_SUMMARY.md
+/INSTALL.md
+/LIDAR_VISUALIZATION_SETUP.md
+/QUANSER_INTEGRATION_NOTES.md
+/autonomous_driving_nodes.md
+AVEDU/avedu/CACHING_IMPLEMENTATION_SUMMARY.md
+AVEDU/avedu/FILE_EXPLORER_CACHING.md
+AVEDU/avedu/FILE_SAVE_ERROR_TROUBLESHOOTING.md
+AVEDU/avedu/INSTALLATION.md
+AVEDU/avedu/REMAINING_ROSFLOW_IMPROVEMENTS.md
+AVEDU/avedu/SETUP.md
+AVEDU/avedu/STYLE_GUIDE.md
+AVEDU/avedu/src/components/visualization/RVizTFViewer.md
+deploy/LOAD_TESTING.md
+deploy/TUNNEL.md
+qcar_docker/GAZEBO_SIMULATION_GUIDE.md

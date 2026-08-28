@@ -1,0 +1,133 @@
+# =============================================================================
+# L.A.D. ROS Deployment
+# ROS 2 Humble with Gazebo simulation
+# =============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lad-ros
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: ros
+spec:
+  # ROS typically runs as single instance due to state
+  replicas: 1
+  strategy:
+    type: Recreate  # ROS needs clean restart, not rolling
+  selector:
+    matchLabels:
+      app: lad-ros
+  template:
+    metadata:
+      labels:
+        app: lad-ros
+        app.kubernetes.io/name: lad
+        app.kubernetes.io/component: ros
+      annotations:
+        checksum/config: "{{ include (print $.Template.BasePath \"/configmap.yaml\") . | sha256sum }}"
+    spec:
+      # ROS container needs special permissions for simulation
+      securityContext:
+        fsGroup: 1000
+
+      containers:
+        - name: ros
+          image: sapetor/lad-ros:latest
+          imagePullPolicy: Always
+
+          ports:
+            - name: rosbridge
+              containerPort: 9090
+              protocol: TCP
+            - name: static
+              containerPort: 7000
+              protocol: TCP
+            - name: wvs
+              containerPort: 8080
+              protocol: TCP
+            - name: unity
+              containerPort: 10000
+              protocol: TCP
+
+          # Environment from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: lad-config
+
+          env:
+            # CORS configuration for rosbridge
+            - name: CORS_ALLOW_ORIGIN
+              value: "*"
+            - name: IP_CONFIG_PATH
+              value: "/config/ip_config.json"
+
+          # Resource limits - ROS/Gazebo needs more resources
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "4Gi"
+              # GPU support if available
+              # nvidia.com/gpu: 1
+
+          # Volume mounts
+          volumeMounts:
+            - name: user-workspaces
+              mountPath: /workspaces
+            - name: ip-config
+              mountPath: /config
+              readOnly: true
+            # X11 socket for display (if needed)
+            # - name: x11-socket
+            #   mountPath: /tmp/.X11-unix
+
+          # Probes - ROS takes longer to start
+          livenessProbe:
+            tcpSocket:
+              port: rosbridge
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 5
+
+          readinessProbe:
+            tcpSocket:
+              port: rosbridge
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+
+          startupProbe:
+            tcpSocket:
+              port: rosbridge
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 30  # Allow up to 5 minutes for startup
+
+      volumes:
+        - name: user-workspaces
+          persistentVolumeClaim:
+            claimName: lad-user-workspaces-pvc
+        - name: ip-config
+          configMap:
+            name: lad-ip-config
+        # X11 socket for display (if needed on host)
+        # - name: x11-socket
+        #   hostPath:
+        #     path: /tmp/.X11-unix
+        #     type: Directory
+
+      # Tolerate GPU nodes if available
+      # tolerations:
+      #   - key: "nvidia.com/gpu"
+      #     operator: "Exists"
+      #     effect: "NoSchedule"
+
+      # Image pull secrets for private registry
+      # imagePullSecrets:
+      #   - name: gitlab-registry-secret

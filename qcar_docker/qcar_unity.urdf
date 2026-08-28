@@ -1,0 +1,361 @@
+<?xml version="1.0"?>
+<robot name="QCar">
+
+  <!-- Materials from materials.xacro -->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+
+  <material name="grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+
+  <material name="orange">
+    <color rgba="1.0 0.42353 0.03922 1.0"/>
+  </material>
+
+  <material name="brown">
+    <color rgba="0.87059 0.81176 0.76471 1.0"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+
+  <!-- Root link for visualization -->
+  <link name="base_link"/>
+
+  <!-- Chassis -->
+  <link name="base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarBody.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarBody.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="2.552"/>
+      <inertia ixx="0.02304837333333334" ixy="0" ixz="0" iyy="0.05111045333333334" iyz="0" izz="0.05656528"/>
+    </inertial>
+  </link>
+
+  <!-- base_link -> base -->
+  <joint name="base_link_to_chasis" type="fixed">
+    <parent link="base_link"/>
+    <child link="base"/>
+  </joint>
+
+  <!-- Sensors -->
+  <joint name="body_lidar_joint" type="continuous">
+    <parent link="base"/>
+    <child link="lidar"/>
+    <origin rpy="0 0 0" xyz="-0.01227 -0.00045 0.16152"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="lidar">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarLidar.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarLidar.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="camera_rgb_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.081686 0.031547 0.15445"/>
+    <parent link="base"/>
+    <child link="camera_rgb"/>
+  </joint>
+  <link name="camera_rgb"/>
+
+  <joint name="camera_csi_front_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.19236 -0.000475 0.093029"/>
+    <parent link="base"/>
+    <child link="camera_csi_front"/>
+  </joint>
+  <link name="camera_csi_front"/>
+
+  <joint name="camera_csi_right_joint" type="fixed">
+    <origin rpy="0 0 -1.5708" xyz="0.12887 -0.06755 0.093029"/>
+    <parent link="base"/>
+    <child link="camera_csi_right"/>
+  </joint>
+  <link name="camera_csi_right"/>
+
+  <joint name="camera_csi_back_joint" type="fixed">
+    <origin rpy="0 0 -3.1416" xyz="-0.16669 -0.000578 0.093029"/>
+    <parent link="base"/>
+    <child link="camera_csi_back"/>
+  </joint>
+  <link name="camera_csi_back"/>
+
+  <joint name="camera_csi_left_joint" type="fixed">
+    <origin rpy="0 0 1.5708" xyz="0.12784 0.052497 0.093029"/>
+    <parent link="base"/>
+    <child link="camera_csi_left"/>
+  </joint>
+  <link name="camera_csi_left"/>
+
+  <!-- Front-left assembly -->
+  <joint name="left_front_position_joint" type="fixed">
+    <parent link="base"/>
+    <child link="left_steering_link"/>
+    <origin rpy="0 0 0" xyz="0.12960 0.05590 0.03338"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="left_steering_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarSteeringHubL.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarSteeringHubL.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_steering_joint" type="revolute">
+    <parent link="left_steering_link"/>
+    <child link="left_front_axle_carrier"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523599" upper="0.523599" effort="0.5649" velocity="4.553"/>
+  </joint>
+
+  <link name="left_front_axle_carrier">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="left_front_axle" type="continuous">
+    <parent link="left_front_axle_carrier"/>
+    <child link="left_front_wheel"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 3.14159"/>
+    <limit effort="5.12766" velocity="244.8696"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="left_front_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.035"/>
+      <inertia ixx="1.36979375e-05" ixy="0" ixz="0" iyy="1.36979375e-05" iyz="0" izz="2.51203125e-05"/>
+    </inertial>
+  </link>
+
+  <!-- Front-right assembly -->
+  <joint name="right_front_position_joint" type="fixed">
+    <parent link="base"/>
+    <child link="right_steering_link"/>
+    <origin rpy="0 0 0" xyz="0.12960 -0.05590 0.03338"/>
+  </joint>
+
+  <link name="right_steering_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 3.14" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarSteeringHubL.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarSteeringHubL.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="right_steering_joint" type="revolute">
+    <parent link="right_steering_link"/>
+    <child link="right_front_axle_carrier"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523599" upper="0.523599" effort="0.5649" velocity="4.553"/>
+  </joint>
+
+  <link name="right_front_axle_carrier">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="right_front_axle" type="continuous">
+    <parent link="right_front_axle_carrier"/>
+    <child link="right_front_wheel"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="5.12766" velocity="244.8696"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="right_front_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.035"/>
+      <inertia ixx="1.36979375e-05" ixy="0" ixz="0" iyy="1.36979375e-05" iyz="0" izz="2.51203125e-05"/>
+    </inertial>
+  </link>
+
+  <!-- Rear-left -->
+  <link name="left_rear_axle_carrier">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="left_rear_axle" type="continuous">
+    <parent link="left_rear_axle_carrier"/>
+    <child link="left_rear_wheel"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 3.14159"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="left_rear_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.035"/>
+      <inertia ixx="1.36979375e-05" ixy="0" ixz="0" iyy="1.36979375e-05" iyz="0" izz="2.51203125e-05"/>
+    </inertial>
+  </link>
+
+  <joint name="left_rear_position_joint" type="fixed">
+    <parent link="base"/>
+    <child link="left_rear_axle_carrier"/>
+    <origin rpy="0 0 0" xyz="-0.12765 0.05610 0.03338"/>
+  </joint>
+
+  <!-- Rear-right -->
+  <link name="right_rear_axle_carrier">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="right_rear_axle" type="continuous">
+    <parent link="right_rear_axle_carrier"/>
+    <child link="right_rear_wheel"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="right_rear_wheel">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.035"/>
+      <inertia ixx="1.36979375e-05" ixy="0" ixz="0" iyy="1.36979375e-05" iyz="0" izz="2.51203125e-05"/>
+    </inertial>
+  </link>
+
+  <joint name="right_rear_position_joint" type="fixed">
+    <parent link="base"/>
+    <child link="right_rear_axle_carrier"/>
+    <origin rpy="0 0 0" xyz="-0.12765 -0.05610 0.03338"/>
+  </joint>
+
+</robot>

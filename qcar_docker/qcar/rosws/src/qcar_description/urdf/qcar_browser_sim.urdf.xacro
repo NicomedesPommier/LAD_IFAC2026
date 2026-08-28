@@ -1,0 +1,336 @@
+<?xml version="1.0"?>
+<!--
+  qcar_browser_sim.urdf.xacro
+  ─────────────────────────────────────────────────────────────────────────────
+  Minimal URDF for the Rapier+Three.js browser simulator.
+
+  What is REMOVED vs qcar_ros2.urdf.xacro
+  ─────────────────────────────────────────────────────────────────────────────
+  1. qcar.gazebo.xacro  — all Gazebo <sensor> and <plugin> tags, including
+     libgazebo_ros_diff_drive (which would fight the browser /odom publisher),
+     libgazebo_ros_camera, and libgazebo_ros_ray_sensor.
+  2. qcar.materials.xacro — only needed for Gazebo material names; RViz uses
+     <material> tags already present on each <visual>.
+  3. <transmission> elements — for ros2_control / gazebo_ros2_control.
+     robot_state_publisher ignores them; they add confusion and size.
+
+  What is CHANGED
+  ─────────────────────────────────────────────────────────────────────────────
+  • body_lidar_joint: continuous → fixed
+    The physical QCar's lidar spins, but the browser sim lidar is a fixed
+    270-ray cast anchored at xyz="-0.01227 -0.00045 0.16152" on the chassis.
+    A continuous joint requires joint_state_publisher to supply an angle every
+    frame; a fixed joint means RSP publishes the static transform once at startup
+    with no runtime joint-state messages needed.
+
+  • Wheel axle joints: continuous → continuous (UNCHANGED)
+    joint_state_publisher will publish angle=0 for all four, which is correct
+    for a parked visual (wheels shown at default position).  If you later want
+    animated wheels reflected in RViz/ROS, publish actual angles on /joint_states.
+
+  What is KEPT
+  ─────────────────────────────────────────────────────────────────────────────
+  • Full kinematic chain: base_link → base → all steering/axle/wheel links.
+    This lets robot_state_publisher build the complete TF tree, which nav2,
+    RViz, and sensor-frame lookups all depend on.
+  • package:// mesh URIs — robot_state_publisher resolves these correctly from
+    the installed qcar_description share directory.  The entrypoint will rewrite
+    them to relative paths in robot_runtime.urdf for the browser URDF viewer.
+-->
+
+<robot name="QCar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ── Geometry constants (from QCar spec) ─────────────────────────────── -->
+  <xacro:property name="chassis_length" value="0.425"/>
+  <xacro:property name="chassis_width"  value="0.192"/>
+  <xacro:property name="chassis_height" value="0.182"/>
+  <xacro:property name="chassis_mass"   value="2.552"/>
+
+  <xacro:property name="hub_dia"         value="0.015"/>
+  <xacro:property name="tire_dia"        value="0.053"/>
+  <xacro:property name="tire_width"      value="0.025"/>
+  <xacro:property name="wheel_mass"      value="0.035"/>
+
+  <!-- ── Inertia helpers ────────────────────────────────────────────────── -->
+  <xacro:macro name="null_inertial">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="solid_cuboid_inertial" params="width depth height mass *origin">
+    <inertial>
+      <xacro:insert_block name="origin"/>
+      <mass value="${mass}"/>
+      <inertia
+        ixx="${mass * (depth  * depth  + height * height) / 12}"
+        ixy="0" ixz="0"
+        iyy="${mass * (width  * width  + height * height) / 12}"
+        iyz="0"
+        izz="${mass * (width  * width  + depth  * depth ) / 12}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="thick_walled_tube_inertial" params="inner_rad outer_rad height mass">
+    <inertial>
+      <mass value="${mass}"/>
+      <inertia
+        ixx="${(1/12) * mass * (3*(inner_rad*inner_rad + outer_rad*outer_rad) + height*height)}"
+        ixy="0" ixz="0"
+        iyy="${(1/12) * mass * (3*(inner_rad*inner_rad + outer_rad*outer_rad) + height*height)}"
+        iyz="0"
+        izz="${mass * (inner_rad*inner_rad + outer_rad*outer_rad) / 2}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- ── TF root ────────────────────────────────────────────────────────── -->
+  <!--
+    base_link is the odometry frame child — the browser's useTfPublisher
+    publishes  odom → base_link  every frame.  RSP then derives all sensor
+    frames relative to base_link from the static joints below.
+  -->
+  <link name="base_link"/>
+
+  <!-- ── Chassis ────────────────────────────────────────────────────────── -->
+  <joint name="base_link_to_chasis" type="fixed">
+    <parent link="base_link"/>
+    <child  link="base"/>
+  </joint>
+
+  <link name="base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarBody.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"><color rgba="0 0 0.8 1"/></material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarBody.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <xacro:solid_cuboid_inertial
+      width="${chassis_length}" depth="${chassis_width}"
+      height="${chassis_height}" mass="${chassis_mass}">
+      <origin xyz="0 0 0"/>
+    </xacro:solid_cuboid_inertial>
+  </link>
+
+  <!-- ── LiDAR ─────────────────────────────────────────────────────────── -->
+  <!--
+    FIXED joint (not continuous).
+    The physical sensor spins; the browser sim fires rays at a fixed angle
+    each frame.  A fixed joint means RSP publishes the transform once at
+    startup (static TF) — no joint_state_publisher message needed.
+  -->
+  <joint name="body_lidar_joint" type="fixed">
+    <parent link="base"/>
+    <child  link="lidar"/>
+    <origin rpy="0 0 0" xyz="-0.01227 -0.00045 0.16152"/>
+  </joint>
+
+  <link name="lidar">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarLidar.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"><color rgba="0.2 0.2 0.2 1"/></material>
+    </visual>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- ── Cameras (fixed sensor frames — nav2 uses these for costmap) ────── -->
+  <joint name="camera_rgb_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.081686 0.031547 0.15445"/>
+    <parent link="base"/>
+    <child  link="camera_rgb"/>
+  </joint>
+  <link name="camera_rgb"/>
+
+  <joint name="camera_csi_front_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.19236 -0.000475 0.093029"/>
+    <parent link="base"/>
+    <child  link="camera_csi_front"/>
+  </joint>
+  <link name="camera_csi_front"/>
+
+  <joint name="camera_csi_right_joint" type="fixed">
+    <origin rpy="0 0 -1.5708" xyz="0.12887 -0.06755 0.093029"/>
+    <parent link="base"/>
+    <child  link="camera_csi_right"/>
+  </joint>
+  <link name="camera_csi_right"/>
+
+  <joint name="camera_csi_back_joint" type="fixed">
+    <origin rpy="0 0 -3.1416" xyz="-0.16669 -0.000578 0.093029"/>
+    <parent link="base"/>
+    <child  link="camera_csi_back"/>
+  </joint>
+  <link name="camera_csi_back"/>
+
+  <joint name="camera_csi_left_joint" type="fixed">
+    <origin rpy="0 0 1.5708" xyz="0.12784 0.052497 0.093029"/>
+    <parent link="base"/>
+    <child  link="camera_csi_left"/>
+  </joint>
+  <link name="camera_csi_left"/>
+
+  <!-- ── Front-left wheel assembly ──────────────────────────────────────── -->
+  <joint name="left_front_position_joint" type="fixed">
+    <parent link="base"/>
+    <child  link="left_steering_link"/>
+    <origin rpy="0 0 0" xyz="0.12960 0.05590 0.03338"/>
+  </joint>
+
+  <link name="left_steering_link">
+    <xacro:null_inertial/>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarSteeringHubL.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"><color rgba="1 0.42 0.04 1"/></material>
+    </visual>
+  </link>
+
+  <joint name="left_steering_joint" type="revolute">
+    <parent link="left_steering_link"/>
+    <child  link="left_front_axle_carrier"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523599" upper="0.523599" effort="0.5649" velocity="4.553"/>
+  </joint>
+
+  <link name="left_front_axle_carrier"><xacro:null_inertial/></link>
+
+  <joint name="left_front_axle" type="continuous">
+    <parent link="left_front_axle_carrier"/>
+    <child  link="left_front_wheel"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 3.14159"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="left_front_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"><color rgba="0.8 0 0 1"/></material>
+    </visual>
+    <xacro:thick_walled_tube_inertial
+      inner_rad="${hub_dia/2}" outer_rad="${tire_dia/2}"
+      height="${tire_width}" mass="${wheel_mass}"/>
+  </link>
+
+  <!-- ── Front-right wheel assembly ─────────────────────────────────────── -->
+  <joint name="right_front_position_joint" type="fixed">
+    <parent link="base"/>
+    <child  link="right_steering_link"/>
+    <origin rpy="0 0 0" xyz="0.12960 -0.05590 0.03338"/>
+  </joint>
+
+  <link name="right_steering_link">
+    <xacro:null_inertial/>
+    <visual>
+      <origin rpy="0 0 3.14" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarSteeringHubL.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"><color rgba="1 0.42 0.04 1"/></material>
+    </visual>
+  </link>
+
+  <joint name="right_steering_joint" type="revolute">
+    <parent link="right_steering_link"/>
+    <child  link="right_front_axle_carrier"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523599" upper="0.523599" effort="0.5649" velocity="4.553"/>
+  </joint>
+
+  <link name="right_front_axle_carrier"><xacro:null_inertial/></link>
+
+  <joint name="right_front_axle" type="continuous">
+    <parent link="right_front_axle_carrier"/>
+    <child  link="right_front_wheel"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="right_front_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"><color rgba="0.8 0 0 1"/></material>
+    </visual>
+    <xacro:thick_walled_tube_inertial
+      inner_rad="${hub_dia/2}" outer_rad="${tire_dia/2}"
+      height="${tire_width}" mass="${wheel_mass}"/>
+  </link>
+
+  <!-- ── Rear-left wheel assembly ──────────────────────────────────────── -->
+  <joint name="left_rear_position_joint" type="fixed">
+    <parent link="base"/>
+    <child  link="left_rear_axle_carrier"/>
+    <origin rpy="0 0 0" xyz="-0.12765 0.05610 0.03338"/>
+  </joint>
+
+  <link name="left_rear_axle_carrier"><xacro:null_inertial/></link>
+
+  <joint name="left_rear_axle" type="continuous">
+    <parent link="left_rear_axle_carrier"/>
+    <child  link="left_rear_wheel"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 3.14159"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="left_rear_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"><color rgba="0.8 0 0 1"/></material>
+    </visual>
+    <xacro:thick_walled_tube_inertial
+      inner_rad="${hub_dia/2}" outer_rad="${tire_dia/2}"
+      height="${tire_width}" mass="${wheel_mass}"/>
+  </link>
+
+  <!-- ── Rear-right wheel assembly ─────────────────────────────────────── -->
+  <joint name="right_rear_position_joint" type="fixed">
+    <parent link="base"/>
+    <child  link="right_rear_axle_carrier"/>
+    <origin rpy="0 0 0" xyz="-0.12765 -0.05610 0.03338"/>
+  </joint>
+
+  <link name="right_rear_axle_carrier"><xacro:null_inertial/></link>
+
+  <joint name="right_rear_axle" type="continuous">
+    <parent link="right_rear_axle_carrier"/>
+    <child  link="right_rear_wheel"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <link name="right_rear_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://qcar_description/meshes/QCarWheel.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"><color rgba="0.8 0 0 1"/></material>
+    </visual>
+    <xacro:thick_walled_tube_inertial
+      inner_rad="${hub_dia/2}" outer_rad="${tire_dia/2}"
+      height="${tire_width}" mass="${wheel_mass}"/>
+  </link>
+
+</robot>

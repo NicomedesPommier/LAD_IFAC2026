@@ -1,0 +1,41 @@
+# Normalize line endings: text files stored and checked out as LF.
+# This stops WSL/Windows editors from flipping endings and churning the diff.
+* text=auto eol=lf
+
+# Windows batch files must stay CRLF or they break.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Binary assets — never touch line endings.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.bmp   binary
+*.webp  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+*.otf   binary
+*.pdf   binary
+*.zip   binary
+*.gz    binary
+*.tar   binary
+*.7z    binary
+*.mp4   binary
+*.mp3   binary
+*.wav   binary
+*.ogg   binary
+*.wasm  binary
+*.data  binary
+*.mem   binary
+*.unity3d binary
+*.bundle binary
+*.glb   binary
+*.fbx   binary
+*.blend binary
+*.stl   binary
+# COLLADA meshes are large generated XML — treat as binary so we don't churn them.
+*.dae   binary

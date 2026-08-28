@@ -1,0 +1,94 @@
+# =============================================================================
+# L.A.D. Ingress
+# Routes external traffic to services
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lad-ingress
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: ingress
+  annotations:
+    # Nginx ingress controller annotations
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+
+    # WebSocket support for ROS bridge
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$remote_addr"
+
+    # Enable WebSocket upgrade
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+
+    # TLS configuration (uncomment if using cert-manager)
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  # TLS configuration (uncomment for HTTPS)
+  # tls:
+  #   - hosts:
+  #       - lad.example.com
+  #     secretName: lad-tls-secret
+  rules:
+    # Update this hostname to your actual domain
+    - host: lad.example.com
+      http:
+        paths:
+          # Frontend - main application
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lad-frontend
+                port:
+                  number: 3000
+
+          # Backend API
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: lad-backend
+                port:
+                  number: 8000
+
+          # Django admin
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: lad-backend
+                port:
+                  number: 8000
+
+          # ROS Bridge WebSocket
+          - path: /rosbridge
+            pathType: Prefix
+            backend:
+              service:
+                name: lad-ros
+                port:
+                  number: 9090
+
+          # ROS static files (URDF/meshes)
+          - path: /ros-static
+            pathType: Prefix
+            backend:
+              service:
+                name: lad-ros
+                port:
+                  number: 7000
+
+          # Web Video Server
+          - path: /wvs
+            pathType: Prefix
+            backend:
+              service:
+                name: lad-ros
+                port:
+                  number: 8080

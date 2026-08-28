@@ -1,0 +1,736 @@
+/* =============================================================
+   Canvas Selector - Matching L.A.D theme (Neon + Glass)
+   ============================================================= */
+
+.canvas-selector {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  // Home button
+  &__home {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    outline: none;
+    cursor: pointer;
+    border: 2px solid var(--border);
+    color: var(--neon);
+    background: var(--glass);
+    padding: 0.75rem 1.5rem;
+    font: inherit;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    &:hover {
+      transform: translateX(-2px);
+      border-color: var(--neon);
+      box-shadow: 0 0 16px rgba(125, 249, 255, 0.4);
+    }
+
+    &:active {
+      transform: translateX(0);
+    }
+  }
+
+  // Header
+  &__header {
+    text-align: center;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
+
+    .title {
+      margin: 0;
+      line-height: 0.9;
+
+      span {
+        display: block;
+        font-size: clamp(36px, 6vw, 72px);
+        letter-spacing: 0.08em;
+        color: var(--text);
+        text-shadow: 0 0 12px var(--neon), 0 0 26px var(--neon2), 0 0 48px rgba(125, 249, 255, 0.35);
+        filter: saturate(1.2);
+      }
+
+      small {
+        display: block;
+        margin-top: 0.6rem;
+        font-size: clamp(12px, 2vw, 16px);
+        opacity: 0.85;
+        letter-spacing: 0.35em;
+      }
+    }
+  }
+
+  // Loading state
+  &__loading {
+    text-align: center;
+    color: var(--neon);
+    font-size: 1.5rem;
+    padding: 4rem;
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 12px var(--neon);
+  }
+
+  // Selection Controls
+  &__controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  &__control-btn {
+    padding: 0.65rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid var(--border);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: inherit;
+    backdrop-filter: blur(6px);
+    background: var(--glass);
+    color: var(--text);
+
+    &:hover:not(:disabled) {
+      border-color: var(--neon);
+      box-shadow: 0 0 12px rgba(125, 249, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      background: rgba(125, 249, 255, 0.15);
+      color: var(--neon);
+      border-color: var(--neon);
+      box-shadow: 0 0 12px rgba(125, 249, 255, 0.3);
+    }
+
+    &--delete {
+      background: rgba(255, 80, 80, 0.15);
+      color: #ff5050;
+      border-color: #ff5050;
+
+      &:hover:not(:disabled) {
+        box-shadow: 0 4px 16px rgba(255, 80, 80, 0.4);
+        background: rgba(255, 80, 80, 0.25);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  // Grid
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    width: 100%;
+  }
+}
+
+// Canvas Cards
+.canvas-card {
+  background: var(--glass);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle glow effect on hover
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, var(--neon), var(--neon2));
+    opacity: 0;
+    border-radius: 18px;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: var(--neon);
+    box-shadow: 0 8px 24px rgba(125, 249, 255, 0.2), 0 0 32px rgba(125, 249, 255, 0.15);
+
+    &::before {
+      opacity: 0.15;
+    }
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  // Selected state
+  &--selected {
+    border-color: var(--neon) !important;
+    background: rgba(125, 249, 255, 0.08) !important;
+    box-shadow: 0 0 20px rgba(125, 249, 255, 0.3) !important;
+
+    &::before {
+      opacity: 0.2 !important;
+    }
+  }
+
+  // Checkbox
+  &__checkbox {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+
+    input[type="checkbox"] {
+      width: 1.5rem;
+      height: 1.5rem;
+      cursor: pointer;
+      appearance: none;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background: var(--glass);
+      backdrop-filter: blur(6px);
+      transition: all 0.2s ease;
+      position: relative;
+
+      &:hover {
+        border-color: var(--neon);
+        box-shadow: 0 0 8px rgba(125, 249, 255, 0.3);
+      }
+
+      &:checked {
+        background: var(--neon);
+        border-color: var(--neon);
+        box-shadow: 0 0 12px rgba(125, 249, 255, 0.5);
+
+        &::after {
+          content: "✓";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #0a0a14;
+          font-size: 1rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  // Create New Canvas Card
+  &--create {
+    border: 2px dashed var(--border);
+    background: rgba(125, 249, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &:hover {
+      background: rgba(125, 249, 255, 0.08);
+      border-color: var(--neon);
+
+      .canvas-card__icon {
+        transform: scale(1.1);
+        text-shadow: 0 0 20px var(--neon);
+      }
+    }
+
+    .canvas-card__icon {
+      font-size: 3rem;
+      color: var(--neon);
+      margin-bottom: 0.5rem;
+      font-weight: 300;
+      transition: all 0.2s ease;
+      text-shadow: 0 0 12px var(--neon);
+    }
+
+    .canvas-card__title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--neon);
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .canvas-card__description {
+      font-size: 0.85rem;
+      color: var(--text);
+      margin: 0;
+      opacity: 0.7;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  // Card Header
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+    flex: 1;
+    word-break: break-word;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 8px rgba(125, 249, 255, 0.3);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__delete {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+    line-height: 1;
+
+    &:hover {
+      opacity: 1;
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 8px rgba(255, 100, 100, 0.6));
+    }
+
+    &:active {
+      transform: scale(1);
+    }
+  }
+
+  &__date {
+    font-size: 0.75rem;
+    color: var(--text);
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+
+  &__description {
+    font-size: 0.9rem;
+    color: var(--text);
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+  }
+
+  &__id {
+    font-size: 0.7rem;
+    color: var(--text);
+    opacity: 0.5;
+    font-family: monospace;
+    letter-spacing: 0.05em;
+  }
+
+  &__qcar-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--neon);
+    background: rgba(125, 249, 255, 0.12);
+    border: 1px solid rgba(125, 249, 255, 0.4);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    text-shadow: 0 0 6px rgba(125, 249, 255, 0.6);
+  }
+}
+
+// Modal styles
+.canvas-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+
+  &__content {
+    background: var(--glass);
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 500px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(125, 249, 255, 0.15);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--text);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px var(--neon);
+    }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text);
+    opacity: 0.6;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    &:hover {
+      opacity: 1;
+      color: var(--neon);
+      text-shadow: 0 0 12px var(--neon);
+    }
+  }
+
+  &__body {
+    padding: 1.5rem;
+  }
+
+  &__field {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      transition: all 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: var(--neon);
+        box-shadow: 0 0 12px rgba(125, 249, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      &::placeholder {
+        color: var(--text);
+        opacity: 0.4;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+  }
+
+  &__field--toggle {
+    margin-top: 0.5rem;
+  }
+
+  &__toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: border-color 0.2s;
+
+    &:has(.canvas-modal__toggle--on) {
+      border-color: rgba(125, 249, 255, 0.5);
+      background: rgba(125, 249, 255, 0.04);
+    }
+  }
+
+  &__toggle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__toggle-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__toggle-hint {
+    font-size: 0.75rem;
+    color: var(--text);
+    opacity: 0.55;
+    line-height: 1.4;
+  }
+
+  &__toggle {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    border: 2px solid var(--border);
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    padding: 0;
+
+    &--on {
+      background: rgba(125, 249, 255, 0.2);
+      border-color: var(--neon);
+      box-shadow: 0 0 10px rgba(125, 249, 255, 0.35);
+
+      .canvas-modal__toggle-thumb {
+        transform: translate(1.35rem, -50%);
+        background: var(--neon);
+        box-shadow: 0 0 8px rgba(125, 249, 255, 0.7);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--neon);
+      outline-offset: 2px;
+    }
+  }
+
+  &__toggle-thumb {
+    position: absolute;
+    top: 50%;
+    left: 0.15rem;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--text);
+    opacity: 0.5;
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s, opacity 0.2s;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  &__button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid var(--border);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: inherit;
+    backdrop-filter: blur(6px);
+
+    &--cancel {
+      background: var(--glass);
+      color: var(--text);
+
+      &:hover {
+        border-color: var(--neon);
+        box-shadow: 0 0 12px rgba(125, 249, 255, 0.2);
+      }
+    }
+
+    &--create {
+      background: rgba(125, 249, 255, 0.15);
+      color: var(--neon);
+      border-color: var(--neon);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(125, 249, 255, 0.4);
+        background: rgba(125, 249, 255, 0.25);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// SweetAlert2 Custom Styling - L.A.D Theme
+// =============================================================================
+
+.lad-swal-popup {
+  border: 2px solid var(--border) !important;
+  border-radius: 18px !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+              0 0 40px rgba(125, 249, 255, 0.15) !important;
+  padding: 2rem !important;
+}
+
+.lad-swal-title {
+  color: var(--text) !important;
+  font-size: 1.8rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 12px var(--neon) !important;
+  margin-bottom: 1rem !important;
+}
+
+.lad-swal-html {
+  color: var(--text) !important;
+  font-family: inherit !important;
+}
+
+.lad-swal-confirm,
+.lad-swal-cancel {
+  padding: 0.75rem 2rem !important;
+  border-radius: 12px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border: 2px solid var(--border) !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  font-family: inherit !important;
+  backdrop-filter: blur(6px) !important;
+  margin: 0 0.5rem !important;
+}
+
+.lad-swal-cancel {
+  background: var(--glass) !important;
+  color: var(--text) !important;
+
+  &:hover {
+    border-color: var(--neon) !important;
+    box-shadow: 0 0 12px rgba(125, 249, 255, 0.2) !important;
+    transform: translateY(-2px) !important;
+  }
+}
+
+.lad-swal-confirm {
+  background: rgba(255, 80, 80, 0.15) !important;
+  color: #ff5050 !important;
+  border-color: #ff5050 !important;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(255, 80, 80, 0.4) !important;
+    background: rgba(255, 80, 80, 0.25) !important;
+  }
+
+  &:active {
+    transform: translateY(0) !important;
+  }
+}
+
+// Warning icon color override
+.swal2-icon.swal2-warning {
+  border-color: #ffcc00 !important;
+  color: #ffcc00 !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: var(--neon) !important;
+
+  .swal2-success-line-tip,
+  .swal2-success-line-long {
+    background-color: var(--neon) !important;
+  }
+
+  .swal2-success-ring {
+    border-color: rgba(125, 249, 255, 0.3) !important;
+  }
+}
+
+.swal2-icon.swal2-error {
+  border-color: #ff5050 !important;
+
+  .swal2-x-mark-line-left,
+  .swal2-x-mark-line-right {
+    background-color: #ff5050 !important;
+  }
+}

@@ -1,0 +1,179 @@
+# =============================================================================
+# L.A.D. GitLab CI/CD Pipeline
+# Build, test, and deploy to Kubernetes
+# =============================================================================
+
+stages:
+  - build
+  - test
+  - deploy
+
+# =============================================================================
+# VARIABLES
+# =============================================================================
+variables:
+  # Docker configuration
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+  # Image names
+  FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/lad-frontend
+  BACKEND_IMAGE: $CI_REGISTRY_IMAGE/lad-backend
+  ROS_IMAGE: $CI_REGISTRY_IMAGE/lad-ros
+
+  # Tags
+  COMMIT_TAG: $CI_COMMIT_SHORT_SHA
+  LATEST_TAG: latest
+
+  # Kubernetes
+  KUBE_NAMESPACE: lad
+
+# =============================================================================
+# BUILD STAGE
+# =============================================================================
+
+.build_template: &build_template
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  only:
+    - main
+    - master
+    - develop
+
+build-frontend:
+  <<: *build_template
+  script:
+    - docker build
+        -t $FRONTEND_IMAGE:$COMMIT_TAG
+        -t $FRONTEND_IMAGE:$LATEST_TAG
+        -f AVEDU/Dockerfile
+        AVEDU/
+    - docker push $FRONTEND_IMAGE:$COMMIT_TAG
+    - docker push $FRONTEND_IMAGE:$LATEST_TAG
+
+build-backend:
+  <<: *build_template
+  script:
+    - docker build
+        -t $BACKEND_IMAGE:$COMMIT_TAG
+        -t $BACKEND_IMAGE:$LATEST_TAG
+        -f LAD/Dockerfile
+        LAD/
+    - docker push $BACKEND_IMAGE:$COMMIT_TAG
+    - docker push $BACKEND_IMAGE:$LATEST_TAG
+
+build-ros:
+  <<: *build_template
+  script:
+    - docker build
+        -t $ROS_IMAGE:$COMMIT_TAG
+        -t $ROS_IMAGE:$LATEST_TAG
+        -f qcar_docker/Dockerfile
+        qcar_docker/
+    - docker push $ROS_IMAGE:$COMMIT_TAG
+    - docker push $ROS_IMAGE:$LATEST_TAG
+  # ROS build takes longer
+  timeout: 30m
+
+# =============================================================================
+# TEST STAGE
+# =============================================================================
+
+test-frontend:
+  stage: test
+  image: node:18-alpine
+  script:
+    - cd AVEDU/avedu
+    - npm ci
+    - npm run test -- --watchAll=false --passWithNoTests
+  only:
+    - main
+    - master
+    - develop
+    - merge_requests
+  allow_failure: true
+
+test-backend:
+  stage: test
+  image: python:3.11-slim
+  script:
+    - cd LAD/lad
+    - pip install -r requirements.txt
+    - python manage.py check
+    - python manage.py test --verbosity=2 || true
+  only:
+    - main
+    - master
+    - develop
+    - merge_requests
+  allow_failure: true
+
+# =============================================================================
+# DEPLOY STAGE
+# =============================================================================
+
+.deploy_template: &deploy_template
+  stage: deploy
+  image: bitnami/kubectl:latest
+  before_script:
+    # Configure kubectl with cluster credentials
+    # These should be set as CI/CD variables in GitLab
+    - kubectl config set-cluster k8s-cluster --server=$KUBE_SERVER --certificate-authority=$KUBE_CA_CERT
+    - kubectl config set-credentials gitlab --token=$KUBE_TOKEN
+    - kubectl config set-context default --cluster=k8s-cluster --user=gitlab --namespace=$KUBE_NAMESPACE
+    - kubectl config use-context default
+
+deploy-staging:
+  <<: *deploy_template
+  script:
+    # Update image tags in deployments
+    - kubectl -n $KUBE_NAMESPACE set image deployment/lad-frontend frontend=$FRONTEND_IMAGE:$COMMIT_TAG
+    - kubectl -n $KUBE_NAMESPACE set image deployment/lad-backend backend=$BACKEND_IMAGE:$COMMIT_TAG
+    - kubectl -n $KUBE_NAMESPACE set image deployment/lad-ros ros=$ROS_IMAGE:$COMMIT_TAG
+
+    # Wait for rollouts
+    - kubectl -n $KUBE_NAMESPACE rollout status deployment/lad-frontend --timeout=120s
+    - kubectl -n $KUBE_NAMESPACE rollout status deployment/lad-backend --timeout=180s
+    - kubectl -n $KUBE_NAMESPACE rollout status deployment/lad-ros --timeout=300s
+  environment:
+    name: staging
+    url: https://lad-staging.example.com
+  only:
+    - develop
+  when: manual
+
+deploy-production:
+  <<: *deploy_template
+  script:
+    # Apply all manifests (in case of changes)
+    - kubectl apply -f k8s/namespace.yaml
+    - kubectl apply -f k8s/configmap.yaml
+    - kubectl apply -f k8s/pvc.yaml
+    - kubectl apply -f k8s/deployment-frontend.yaml
+    - kubectl apply -f k8s/deployment-backend.yaml
+    - kubectl apply -f k8s/deployment-ros.yaml
+    - kubectl apply -f k8s/service-frontend.yaml
+    - kubectl apply -f k8s/service-backend.yaml
+    - kubectl apply -f k8s/service-ros.yaml
+    - kubectl apply -f k8s/ingress.yaml
+
+    # Update image tags
+    - kubectl -n $KUBE_NAMESPACE set image deployment/lad-frontend frontend=$FRONTEND_IMAGE:$COMMIT_TAG
+    - kubectl -n $KUBE_NAMESPACE set image deployment/lad-backend backend=$BACKEND_IMAGE:$COMMIT_TAG
+    - kubectl -n $KUBE_NAMESPACE set image deployment/lad-ros ros=$ROS_IMAGE:$COMMIT_TAG
+
+    # Wait for rollouts
+    - kubectl -n $KUBE_NAMESPACE rollout status deployment/lad-frontend --timeout=120s
+    - kubectl -n $KUBE_NAMESPACE rollout status deployment/lad-backend --timeout=180s
+    - kubectl -n $KUBE_NAMESPACE rollout status deployment/lad-ros --timeout=300s
+  environment:
+    name: production
+    url: https://lad.example.com
+  only:
+    - main
+    - master
+  when: manual

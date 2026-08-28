@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Entornos
+.venv/
+venv/
+.env
+.env.*
+
+# Django/FastAPI (si aplica)
+media/
+staticfiles/
+*.sqlite3
+
+# Cobertura/tests
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# ROS2 si tu backend genera algo con colcon (si no, puedes quitarlo)
+build/
+install/
+log/
+.colcon/
+
+# SQLite WAL/SHM sidecars (created by WAL mode)
+*.sqlite3-*
+
+# Track the backend env template despite .env.* above
+!.env.example

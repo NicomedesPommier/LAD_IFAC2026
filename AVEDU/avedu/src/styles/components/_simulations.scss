@@ -1,0 +1,117 @@
+// src/styles/components/_simulations.scss
+// Estilos propios de las simulaciones en diapositiva (src/simulations/**).
+// El resto (tarjetas, columnas, sliders, lienzo) sale de pages/_slides.scss.
+// Solo variables del tema: nada de colores a mano.
+
+.sim-panel {
+  .slide-figure figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  // Los mandos se apilan; el lienzo es quien se estira.
+  .slide-controls {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+}
+
+// Lectura de valores derivados (radio de giro, velocidad de guiñada…).
+.sim-readout {
+  font-size: 0.75rem;
+  padding: 0.4rem;
+
+  b {
+    color: var(--neon);
+  }
+
+  // Valor secundario (p. ej. la velocidad de guiñada).
+  .sim-readout__alt {
+    color: var(--neon2);
+  }
+}
+
+// ── Vector de estado en vivo ─────────────────────────────────────────────────
+.state-vector {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  background: var(--glass);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  &__title {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.45rem;
+  }
+
+  &__rows {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(4.5rem, auto) 2.6rem 1fr;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.2rem 0.3rem;
+    border-radius: 6px;
+    border-left: 2px solid transparent;
+    font-size: 0.78rem;
+    transition: background 0.18s ease, border-color 0.18s ease;
+
+    // Se ilumina cuando ese estado está cambiando.
+    &.is-changing {
+      background: color-mix(in srgb, var(--neon) 12%, transparent);
+      border-left-color: var(--neon);
+    }
+
+    &.is-accent2 .state-vector__value {
+      color: var(--neon2);
+    }
+  }
+
+  &__symbol {
+    color: var(--text-dim);
+  }
+
+  &__value {
+    color: var(--neon);
+    font-weight: 600;
+    text-align: right;
+    // Evita que la fila "baile" al cambiar de dígitos.
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__unit {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+  }
+
+  &__eq {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    opacity: 0.85;
+  }
+
+  &__caption {
+    margin: 0.5rem 0 0;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+}
+
+// Casilla de opción dentro de los controles (mostrar vectores, etc.).
+.sim-checkbox {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.25rem 0;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}

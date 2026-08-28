@@ -1,0 +1,13 @@
+
+
+docker build -t qcar_sim .
+
+docker run -it --rm --name qcar_sim -p 9090:9090 -p 8080:8080 qcar_sim
+
+docker exec -it qcar_sim bash
+
+
+docker compose up --build
+
+docker compose up -d
+docker compose logs -f

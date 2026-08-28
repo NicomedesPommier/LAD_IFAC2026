@@ -1,0 +1,830 @@
+[
+  {
+    "model": "learning.unit",
+    "pk": "introduction",
+    "fields": {
+      "title": "Introduction",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "vehicle-dynamics",
+    "fields": {
+      "title": "Vehicle Dynamics",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "ros2-concepts",
+    "fields": {
+      "title": "ROS 2 Concepts",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "sensing",
+    "fields": {
+      "title": "Sensing",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "ros2-advanced",
+    "fields": {
+      "title": "ROS 2 Advanced",
+      "order": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "transformations",
+    "fields": {
+      "title": "Transformations",
+      "order": 6,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "perception",
+    "fields": {
+      "title": "Perception",
+      "order": 7,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "simulation",
+    "fields": {
+      "title": "Simulation",
+      "order": 8,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "planning",
+    "fields": {
+      "title": "Planning",
+      "order": 9,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "control",
+    "fields": {
+      "title": "Control",
+      "order": 10,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "ai",
+    "fields": {
+      "title": "AI",
+      "order": 11,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.unit",
+    "pk": "safety-vv",
+    "fields": {
+      "title": "Safety V&V",
+      "order": 12,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "intro-ui-basics",
+    "fields": {
+      "unit": "introduction",
+      "title": "UI Basics and Navigation",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "intro-getting-started",
+    "fields": {
+      "unit": "introduction",
+      "title": "Getting Started Tutorial",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "vd-physics-intro",
+    "fields": {
+      "unit": "vehicle-dynamics",
+      "title": "Introduction to Vehicle Physics",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "vd-center-of-rotation",
+    "fields": {
+      "unit": "vehicle-dynamics",
+      "title": "Instantaneous Center of Rotation",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "vd-ackermann",
+    "fields": {
+      "unit": "vehicle-dynamics",
+      "title": "Ackermann Steering",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "vd-bicycle-model",
+    "fields": {
+      "unit": "vehicle-dynamics",
+      "title": "Bicycle Model",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "vd-simulations",
+    "fields": {
+      "unit": "vehicle-dynamics",
+      "title": "Vehicle Dynamics Simulations",
+      "order": 5,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-nodes-intro",
+    "fields": {
+      "unit": "ros2-concepts",
+      "title": "Introduction to Nodes",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-topics",
+    "fields": {
+      "unit": "ros2-concepts",
+      "title": "Topics and Publishing",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-subscriptions",
+    "fields": {
+      "unit": "ros2-concepts",
+      "title": "Subscriptions and Message Flow",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-mini-games",
+    "fields": {
+      "unit": "ros2-concepts",
+      "title": "ROS 2 Mini-Games",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sensing-integration",
+    "fields": {
+      "unit": "sensing",
+      "title": "Sensor Integration Basics",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sensing-subscribe",
+    "fields": {
+      "unit": "sensing",
+      "title": "Subscribing to Sensor Data",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sensing-visualization",
+    "fields": {
+      "unit": "sensing",
+      "title": "Visualizing Sensor Outputs",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sensing-tasks",
+    "fields": {
+      "unit": "sensing",
+      "title": "Sensing Tasks and Games",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-qos-intro",
+    "fields": {
+      "unit": "ros2-advanced",
+      "title": "Quality of Service (QoS) Introduction",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-qos-settings",
+    "fields": {
+      "unit": "ros2-advanced",
+      "title": "QoS Settings for Unreliable Networks",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-realtime",
+    "fields": {
+      "unit": "ros2-advanced",
+      "title": "Real-time Use Cases",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ros2-algorithms",
+    "fields": {
+      "unit": "ros2-advanced",
+      "title": "Algorithms for Unreliable Conditions",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "tf-importance",
+    "fields": {
+      "unit": "transformations",
+      "title": "Importance of Transformations",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "tf-sensor-alignment",
+    "fields": {
+      "unit": "transformations",
+      "title": "Sensor Alignment with TF",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "tf-robot-navigation",
+    "fields": {
+      "unit": "transformations",
+      "title": "Robot Navigation Transforms",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "tf-practical-examples",
+    "fields": {
+      "unit": "transformations",
+      "title": "Practical Transformation Examples",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "perception-libraries",
+    "fields": {
+      "unit": "perception",
+      "title": "Perception Libraries Overview",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "perception-obstacle",
+    "fields": {
+      "unit": "perception",
+      "title": "Obstacle Detection",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "perception-lane",
+    "fields": {
+      "unit": "perception",
+      "title": "Lane Detection and Changing",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "perception-tasks",
+    "fields": {
+      "unit": "perception",
+      "title": "Autonomous Vehicle Perception Tasks",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sim-urdf-intro",
+    "fields": {
+      "unit": "simulation",
+      "title": "Introduction to URDF",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sim-xml-basics",
+    "fields": {
+      "unit": "simulation",
+      "title": "XML Basics for Simulation",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sim-virtual-env",
+    "fields": {
+      "unit": "simulation",
+      "title": "Creating Virtual Environments",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "sim-av-simulation",
+    "fields": {
+      "unit": "simulation",
+      "title": "Autonomous Vehicle Simulation",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "planning-planners",
+    "fields": {
+      "unit": "planning",
+      "title": "Introduction to Planners",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "planning-controllers",
+    "fields": {
+      "unit": "planning",
+      "title": "Controllers Overview",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "planning-configuration",
+    "fields": {
+      "unit": "planning",
+      "title": "Configuring Planners and Controllers",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "planning-av-tasks",
+    "fields": {
+      "unit": "planning",
+      "title": "Planning for AV Tasks",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "control-tuning",
+    "fields": {
+      "unit": "control",
+      "title": "Control Parameter Tuning",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "control-robot-types",
+    "fields": {
+      "unit": "control",
+      "title": "Control for Different Robot Types",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "control-path-following",
+    "fields": {
+      "unit": "control",
+      "title": "Path Following in Simulation",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "control-accuracy",
+    "fields": {
+      "unit": "control",
+      "title": "Ensuring Smooth and Accurate Control",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ai-models-intro",
+    "fields": {
+      "unit": "ai",
+      "title": "Introduction to AI Models",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ai-setup",
+    "fields": {
+      "unit": "ai",
+      "title": "Setting Up AI Models",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ai-ros2-integration",
+    "fields": {
+      "unit": "ai",
+      "title": "Integrating AI with ROS 2",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "ai-av-performance",
+    "fields": {
+      "unit": "ai",
+      "title": "AI for Enhanced AV Performance",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "safety-verification",
+    "fields": {
+      "unit": "safety-vv",
+      "title": "Formal Verification Methods",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "safety-testing",
+    "fields": {
+      "unit": "safety-vv",
+      "title": "Testing Frameworks",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "safety-reliability",
+    "fields": {
+      "unit": "safety-vv",
+      "title": "System Safety and Reliability",
+      "order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.level",
+    "pk": "safety-validation",
+    "fields": {
+      "unit": "safety-vv",
+      "title": "Validation Best Practices",
+      "order": 4,
+      "is_active": true
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 1,
+    "fields": {
+      "level": "intro-ui-basics",
+      "code": "INTRO_UI_COMPLETE",
+      "description": "Complete UI basics tutorial",
+      "points": 20
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 2,
+    "fields": {
+      "level": "intro-getting-started",
+      "code": "INTRO_TUTORIAL_COMPLETE",
+      "description": "Complete getting started tutorial",
+      "points": 30
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 3,
+    "fields": {
+      "level": "vd-physics-intro",
+      "code": "VD_PHYSICS_BASICS",
+      "description": "Understand basic vehicle physics concepts",
+      "points": 25
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 4,
+    "fields": {
+      "level": "vd-center-of-rotation",
+      "code": "VD_ICR_COMPLETE",
+      "description": "Demonstrate understanding of ICR",
+      "points": 25
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 5,
+    "fields": {
+      "level": "vd-ackermann",
+      "code": "VD_ACKERMANN_COMPLETE",
+      "description": "Complete Ackermann steering simulation",
+      "points": 25
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 6,
+    "fields": {
+      "level": "vd-bicycle-model",
+      "code": "VD_BICYCLE_COMPLETE",
+      "description": "Complete bicycle model exercises",
+      "points": 25
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 7,
+    "fields": {
+      "level": "ros2-nodes-intro",
+      "code": "ROS2_NODE_BASICS",
+      "description": "Create and run basic ROS 2 nodes",
+      "points": 20
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 8,
+    "fields": {
+      "level": "ros2-topics",
+      "code": "ROS2_TOPIC_PUB",
+      "description": "Publish to ROS 2 topics successfully",
+      "points": 20
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 9,
+    "fields": {
+      "level": "ros2-subscriptions",
+      "code": "ROS2_TOPIC_SUB",
+      "description": "Subscribe to topics and process messages",
+      "points": 20
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 10,
+    "fields": {
+      "level": "ros2-mini-games",
+      "code": "ROS2_MINIGAME_WIN",
+      "description": "Complete ROS 2 mini-game",
+      "points": 40
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 11,
+    "fields": {
+      "level": "sensing-integration",
+      "code": "SENSE_INTEGRATE",
+      "description": "Integrate sensor into ROS 2 system",
+      "points": 25
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 12,
+    "fields": {
+      "level": "sensing-visualization",
+      "code": "SENSE_VISUALIZE",
+      "description": "Visualize sensor data successfully",
+      "points": 25
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 13,
+    "fields": {
+      "level": "ros2-qos-settings",
+      "code": "ROS2_QOS_CONFIG",
+      "description": "Configure QoS settings properly",
+      "points": 30
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 14,
+    "fields": {
+      "level": "ros2-algorithms",
+      "code": "ROS2_UNRELIABLE_ALGO",
+      "description": "Implement algorithm for unreliable network",
+      "points": 40
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 15,
+    "fields": {
+      "level": "tf-sensor-alignment",
+      "code": "TF_SENSOR_ALIGN",
+      "description": "Align sensors using transformations",
+      "points": 30
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 16,
+    "fields": {
+      "level": "tf-robot-navigation",
+      "code": "TF_NAV_COMPLETE",
+      "description": "Apply transforms for robot navigation",
+      "points": 30
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 17,
+    "fields": {
+      "level": "perception-obstacle",
+      "code": "PERC_OBSTACLE_DETECT",
+      "description": "Successfully detect obstacles",
+      "points": 35
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 18,
+    "fields": {
+      "level": "perception-lane",
+      "code": "PERC_LANE_DETECT",
+      "description": "Implement lane detection and changing",
+      "points": 35
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 19,
+    "fields": {
+      "level": "sim-urdf-intro",
+      "code": "SIM_URDF_CREATE",
+      "description": "Create basic URDF model",
+      "points": 30
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 20,
+    "fields": {
+      "level": "sim-virtual-env",
+      "code": "SIM_ENV_CREATE",
+      "description": "Create custom virtual environment",
+      "points": 35
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 21,
+    "fields": {
+      "level": "planning-configuration",
+      "code": "PLAN_CONFIG_COMPLETE",
+      "description": "Configure planner for specific task",
+      "points": 35
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 22,
+    "fields": {
+      "level": "control-tuning",
+      "code": "CTRL_TUNE_PARAMS",
+      "description": "Tune control parameters successfully",
+      "points": 35
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 23,
+    "fields": {
+      "level": "control-path-following",
+      "code": "CTRL_PATH_FOLLOW",
+      "description": "Achieve smooth path following",
+      "points": 35
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 24,
+    "fields": {
+      "level": "ai-ros2-integration",
+      "code": "AI_ROS2_INTEGRATE",
+      "description": "Integrate AI model with ROS 2",
+      "points": 40
+    }
+  },
+  {
+    "model": "learning.objective",
+    "pk": 25,
+    "fields": {
+      "level": "safety-testing",
+      "code": "SAFE_TEST_COMPLETE",
+      "description": "Complete safety testing framework tasks",
+      "points": 40
+    }
+  }
+]

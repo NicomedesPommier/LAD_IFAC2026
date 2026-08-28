@@ -1,0 +1,634 @@
+// styles/pages/_ide-test.scss
+// Test page for ROS Visual IDE components
+
+@use '../variables' as *;
+
+.ide-test {
+  height: 100vh;
+  background: linear-gradient(135deg, var(--ide-bg) 0%, var(--bg-primary) 50%, var(--bg-tertiary) 100%);
+  color: var(--ide-text);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+
+  // Loading state
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: var(--neon);
+  }
+
+  // Header
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-surface);
+    border-bottom: 2px solid var(--ide-border);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  &__back {
+    appearance: none;
+    background: rgba(var(--neon-rgb), 0.1);
+    border: 1px solid var(--ide-border);
+    color: var(--neon);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(var(--neon-rgb), 0.2);
+      box-shadow: 0 0 12px rgba(var(--neon-rgb), 0.3);
+      transform: translateX(-2px);
+    }
+  }
+
+  &__title {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+  }
+
+  &__title-main {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 12px var(--neon), 0 0 24px rgba(var(--neon-rgb), 0.5);
+    background: linear-gradient(90deg, var(--neon), var(--neon2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__title-sub {
+    font-size: 0.75rem;
+    color: var(--ide-text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  // Body: holds views + bookmark nav
+  &__body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+  }
+
+  // Terminal view (full height)
+  &__terminal-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  // Simulation view (full height)
+  &__sim-view {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  // QCar visualization view (full height, floating widgets)
+  &__viz-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  // Main Layout (2 columns: explorer | canvas)
+  &__layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 0;
+    overflow: hidden;
+    min-height: 0;
+    transition: grid-template-columns 0.3s ease;
+
+    &--collapsed {
+      grid-template-columns: 0px 1fr;
+    }
+  }
+
+  // File Explorer (Left sidebar)
+  &__explorer {
+    background: var(--bg-overlay);
+    border-right: 1px solid var(--ide-border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s ease, width 0.3s ease;
+
+    &--collapsed {
+      width: 0;
+      min-width: 0;
+      border-right: none;
+    }
+  }
+
+  &__explorer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--ide-border);
+    min-height: 40px;
+    transition: background 0.3s ease;
+  }
+
+  &__explorer-title {
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--neon);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__explorer-toggle {
+    appearance: none;
+    background: rgba(var(--neon-rgb), 0.1);
+    border: 1px solid var(--ide-border);
+    color: var(--neon);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+    line-height: 1;
+
+    &:hover {
+      background: rgba(var(--neon-rgb), 0.2);
+      box-shadow: 0 0 8px rgba(var(--neon-rgb), 0.3);
+    }
+  }
+
+  .ide-test__explorer--collapsed &__explorer-title {
+    display: none;
+  }
+
+  .ide-test__explorer--collapsed &__explorer-toggle {
+    margin: 0 auto;
+  }
+
+  // Palette (Now at top of canvas - styled by rosflow.scss)
+  &__palette {
+    // rosflow.scss handles the tabbed palette styling
+    // Just add some spacing to fit in the IDE layout
+    margin: 0.5rem 0.5rem 0 0.5rem;
+  }
+
+  // Canvas (Center)
+  &__canvas {
+    display: flex;
+    flex-direction: column;
+    background: var(--ide-bg-lighter);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+
+  &__canvas-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--ide-border);
+    transition: background 0.3s ease;
+  }
+
+  &__canvas-title {
+    font-weight: 700;
+    color: var(--neon);
+    font-size: 0.95rem;
+  }
+
+  &__canvas-path {
+    font-size: 0.8rem;
+    color: var(--ide-text-muted);
+    font-family: monospace;
+  }
+
+  &__canvas-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; // Important: allows flex child to shrink below content size
+  }
+
+  &__editor-container {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  // Bookmark nav — floating pill at bottom center (same pattern as EmbeddedIDE)
+  &__bookmark-nav {
+    display: flex;
+    flex-direction: row;
+    gap: 0.6rem;
+    padding: 0.5rem 0.6rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--ide-border);
+    border-radius: 30px;
+    z-index: 100;
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(8px);
+
+    &:hover,
+    &:focus-within {
+      opacity: 1;
+    }
+  }
+
+  // Floating URDF window
+  &__urdf-window {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 5rem;
+    width: 360px;
+    height: 500px;
+    background: var(--bg-surface);
+    border: 1px solid var(--ide-border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 300;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 24px rgba(var(--neon-rgb), 0.12);
+    resize: both;
+  }
+
+  &__urdf-window-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-overlay);
+    border-bottom: 1px solid var(--ide-border);
+    flex-shrink: 0;
+    cursor: move;
+    user-select: none;
+
+    span {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--neon);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+  }
+
+  &__urdf-window-copy {
+    appearance: none;
+    background: rgba(var(--neon-rgb), 0.1);
+    border: 1px solid var(--ide-border);
+    color: var(--neon);
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(var(--neon-rgb), 0.2);
+      box-shadow: 0 0 6px rgba(var(--neon-rgb), 0.3);
+    }
+  }
+
+  &__urdf-window-close {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--ide-text-muted);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.2rem;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--ide-text);
+    }
+  }
+
+  &__urdf-window-viewer {
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  &__urdf-window-code {
+    max-height: 140px;
+    overflow: auto;
+    border-top: 1px solid var(--ide-border);
+    flex-shrink: 0;
+
+    pre {
+      margin: 0;
+      padding: 0.6rem 0.75rem;
+      font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      font-size: 0.72rem;
+      line-height: 1.5;
+      color: var(--ide-text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+}
+
+// Bookmark button (shared style with EmbeddedIDE)
+.ide-test {
+  .bookmark-btn {
+    display: flex;
+    align-items: center;
+    height: 2.2rem;
+    width: 2.2rem;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    color: var(--ide-text-muted);
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+      width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      border-radius 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+
+    &__icon {
+      width: 2.2rem;
+      height: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    &__label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(-5px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      padding-right: 1rem;
+      pointer-events: none;
+    }
+
+    &:hover {
+      width: 7rem;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--ide-border);
+      color: var(--ide-text);
+
+      .bookmark-btn__label {
+        opacity: 1;
+        transform: translateX(0);
+        transition-delay: 0.05s;
+      }
+    }
+
+    &--active {
+      background: rgba(var(--neon-rgb), 0.08);
+      border-color: rgba(var(--neon-rgb), 0.2);
+      color: var(--neon);
+
+      &:hover {
+        background: rgba(var(--neon-rgb), 0.15);
+        border-color: var(--neon);
+      }
+    }
+
+    // QCar Viz button — distinct accent so students know it's physical hardware
+    &--qcar {
+      color: #44ff88;
+      border-color: rgba(68, 255, 136, 0.2);
+
+      &:hover {
+        color: #44ff88;
+        background: rgba(68, 255, 136, 0.1);
+        border-color: rgba(68, 255, 136, 0.5);
+      }
+
+      &.bookmark-btn--active {
+        background: rgba(68, 255, 136, 0.12);
+        border-color: rgba(68, 255, 136, 0.4);
+        color: #44ff88;
+        box-shadow: 0 0 8px rgba(68, 255, 136, 0.2);
+
+        &:hover {
+          background: rgba(68, 255, 136, 0.2);
+          border-color: #44ff88;
+        }
+      }
+    }
+  }
+}
+
+// Light theme overrides
+[data-theme="light"] {
+  .ide-test {
+    background: linear-gradient(135deg, var(--ide-bg) 0%, var(--bg-primary) 50%, var(--bg-tertiary) 100%);
+
+    &__title-main {
+      text-shadow: none;
+    }
+
+    &__back:hover {
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}
+
+// Button styles
+.btn {
+  appearance: none;
+  background: rgba(var(--neon-rgb), 0.1);
+  border: 1px solid var(--ide-border);
+  color: var(--neon);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-family: inherit;
+
+  &:hover {
+    background: rgba(var(--neon-rgb), 0.2);
+    box-shadow: 0 0 12px rgba(var(--neon-rgb), 0.3);
+  }
+
+  &--small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  &--primary {
+    background: rgba(var(--neon-rgb), 0.2);
+    border-color: var(--neon);
+    color: var(--neon);
+
+    &:hover {
+      background: rgba(var(--neon-rgb), 0.3);
+      box-shadow: 0 0 16px rgba(var(--neon-rgb), 0.5);
+    }
+  }
+}
+
+[data-theme="light"] {
+  .btn:hover {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+// Responsive
+@media (max-width: 1200px) {
+  .ide-test__layout {
+    grid-template-columns: 200px 1fr;
+
+    &--collapsed {
+      grid-template-columns: 40px 1fr;
+    }
+  }
+
+  .ide-test__urdf-window {
+    width: 320px;
+    height: 440px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ide-test__layout {
+    grid-template-columns: 1fr;
+
+    &--collapsed {
+      grid-template-columns: 0px 1fr;
+    }
+  }
+
+  .ide-test__explorer {
+    max-height: 180px;
+  }
+
+  .ide-test__urdf-window {
+    right: 0.75rem;
+    bottom: 4.5rem;
+    width: calc(100vw - 1.5rem);
+    max-width: 360px;
+    height: 380px;
+  }
+}
+
+// Empty state
+.ide-test__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 3rem;
+  text-align: center;
+  color: var(--ide-text-muted);
+
+  h3 {
+    color: var(--neon);
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    text-shadow: 0 0 10px rgba(var(--neon-rgb), 0.3);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+// Editor Mode Selector
+.ide-test__editor-mode {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--ide-border);
+  transition: background 0.3s ease;
+
+  &-btn {
+    appearance: none;
+    background: var(--bg-primary);
+    border: 1px solid var(--ide-border);
+    color: var(--ide-text-muted);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(var(--neon-rgb), 0.1);
+      border-color: var(--neon);
+      color: var(--neon);
+    }
+
+    &.active {
+      background: rgba(var(--neon-rgb), 0.2);
+      border-color: var(--neon);
+      color: var(--neon);
+      box-shadow: 0 0 8px rgba(var(--neon-rgb), 0.3);
+    }
+  }
+}
+
+.ide-test__file-name {
+  font-size: 0.9rem;
+  color: var(--ide-text);
+  font-weight: 500;
+  margin-left: auto;
+  opacity: 0.8;
+}
+
+[data-theme="light"] {
+  .ide-test__empty h3 {
+    text-shadow: none;
+  }
+}

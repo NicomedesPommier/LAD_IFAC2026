@@ -1,0 +1,11 @@
+# =============================================================================
+# L.A.D. Kubernetes Namespace
+# Learn Autonomous Driving - Educational Platform
+# =============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: namespace

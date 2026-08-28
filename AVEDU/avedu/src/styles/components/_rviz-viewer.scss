@@ -1,0 +1,323 @@
+// src/styles/components/_rviz-viewer.scss
+// RViz Viewer - TF visualization component
+
+.rviz-viewer {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary, #1a1a1a);
+  border: 1px solid var(--border, #333);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 300px;
+  transition: all 0.3s ease;
+
+  // Expanded fullscreen mode
+  &--expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 85vh;
+    z-index: 1000;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr 300px;
+
+    .rviz-viewer__header {
+      grid-column: 1 / -1;
+    }
+
+    .rviz-viewer__canvas {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .rviz-viewer__settings {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .rviz-viewer__status {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
+  }
+
+  // Disconnected state
+  &--disconnected {
+    .rviz-viewer__canvas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.rviz-viewer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-tertiary, #0a0a0a);
+  border-bottom: 1px solid var(--border, #333);
+}
+
+.rviz-viewer__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--neon, #7df9ff);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rviz-viewer__expand-btn {
+  background: transparent;
+  border: 1px solid var(--border, #333);
+  color: var(--text-secondary, #aaa);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: var(--neon, #7df9ff);
+    color: var(--neon, #7df9ff);
+    background: rgba(125, 249, 255, 0.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.rviz-viewer__canvas {
+  flex: 1;
+  position: relative;
+  cursor: grab;
+  background: #222;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.rviz-viewer__message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary, #999);
+  text-align: center;
+  padding: 2rem;
+}
+
+.rviz-viewer__icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.rviz-viewer__settings {
+  background: var(--bg-tertiary, #0a0a0a);
+  border-left: 1px solid var(--border, #333);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.rviz-viewer__settings-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border, #333);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--neon, #7df9ff);
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary, #ccc);
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: var(--neon, #7df9ff);
+    }
+
+    input[type="range"] {
+      flex: 1;
+      cursor: pointer;
+      accent-color: var(--neon, #7df9ff);
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--bg-secondary, #1a1a1a);
+      border: 1px solid var(--border, #333);
+      color: var(--text-primary, #fff);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+
+      &:focus {
+        outline: none;
+        border-color: var(--neon, #7df9ff);
+        box-shadow: 0 0 0 2px rgba(125, 249, 255, 0.2);
+      }
+    }
+
+    span {
+      min-width: 50px;
+      text-align: right;
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      color: var(--neon, #7df9ff);
+    }
+  }
+}
+
+.rviz-viewer__frames-list {
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--bg-secondary, #1a1a1a);
+  border: 1px solid var(--border, #333);
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.rviz-viewer__frame-item {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  font-family: 'Courier New', monospace;
+  color: var(--text-secondary, #aaa);
+  border-bottom: 1px solid var(--border, #2a2a2a);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba(125, 249, 255, 0.1);
+    color: var(--neon, #7df9ff);
+  }
+}
+
+.rviz-viewer__status {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-tertiary, #0a0a0a);
+  border-top: 1px solid var(--border, #333);
+  font-size: 0.75rem;
+  color: var(--text-secondary, #aaa);
+}
+
+.rviz-viewer__status-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  code {
+    background: rgba(125, 249, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: var(--neon, #7df9ff);
+    font-size: 0.7rem;
+  }
+
+  strong {
+    color: var(--neon, #7df9ff);
+  }
+}
+
+.rviz-viewer__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #666;
+
+  &--connected {
+    background: #00ff00;
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+  }
+}
+
+.rviz-viewer__status-hint {
+  margin-left: auto;
+  font-size: 0.7rem;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.rviz-viewer__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+}
+
+// Scrollbar styles for frames list
+.rviz-viewer__frames-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.rviz-viewer__frames-list::-webkit-scrollbar-track {
+  background: var(--bg-tertiary, #0a0a0a);
+}
+
+.rviz-viewer__frames-list::-webkit-scrollbar-thumb {
+  background: var(--border, #333);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--neon, #7df9ff);
+  }
+}
+
+// Settings scrollbar
+.rviz-viewer__settings::-webkit-scrollbar {
+  width: 8px;
+}
+
+.rviz-viewer__settings::-webkit-scrollbar-track {
+  background: var(--bg-tertiary, #0a0a0a);
+}
+
+.rviz-viewer__settings::-webkit-scrollbar-thumb {
+  background: var(--border, #333);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--neon, #7df9ff);
+  }
+}

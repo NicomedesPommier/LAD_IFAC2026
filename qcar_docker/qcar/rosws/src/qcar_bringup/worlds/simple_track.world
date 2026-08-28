@@ -1,0 +1,268 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="simple_track">
+    <!-- Physics settings -->
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Simple track with walls -->
+    <!-- Outer boundary walls -->
+    <model name="outer_wall_1">
+      <static>true</static>
+      <pose>0 5 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="outer_wall_2">
+      <static>true</static>
+      <pose>0 -5 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="outer_wall_3">
+      <static>true</static>
+      <pose>5 0 1 0 0 1.5707963</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="outer_wall_4">
+      <static>true</static>
+      <pose>-5 0 1 0 0 1.5707963</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>10 0.2 2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Inner obstacles -->
+    <model name="obstacle_1">
+      <static>true</static>
+      <pose>2 2 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.8 0.2 1</ambient>
+            <diffuse>0.2 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_2">
+      <static>true</static>
+      <pose>-2 -2 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>0.5</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>0.5</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.8 1</ambient>
+            <diffuse>0.2 0.2 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_3">
+      <static>true</static>
+      <pose>-2 2 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 2 0.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 2 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.2 1</ambient>
+            <diffuse>0.8 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Overhead camera looking at the QCar -->
+    <model name="overhead_camera">
+      <static>true</static>
+      <!-- Position camera above spawn point looking straight down -->
+      <!-- Pose: x y z roll pitch yaw -->
+      <!-- Positioned at (0, 0, 8) directly above center, looking straight down -->
+      <!-- pitch=1.5708 (90 degrees) points camera straight down -->
+      <pose>0 0 8 0 1.5708 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.1 0.1 0.1</size>
+            </box>
+          </geometry>
+        </visual>
+        <sensor name="overhead_camera_sensor" type="camera">
+          <camera>
+            <horizontal_fov>1.57</horizontal_fov>
+            <image>
+              <width>800</width>
+              <height>600</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>30</update_rate>
+          <visualize>true</visualize>
+          <plugin name="overhead_camera_controller" filename="libgazebo_ros_camera.so">
+            <ros>
+              <namespace>/qcar</namespace>
+              <remapping>overhead_camera_sensor/image_raw:=overhead/image_raw</remapping>
+              <remapping>overhead_camera_sensor/camera_info:=overhead/camera_info</remapping>
+            </ros>
+            <camera_name>overhead</camera_name>
+            <frame_name>overhead_camera_link</frame_name>
+            <hack_baseline>0.07</hack_baseline>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- Scene lighting -->
+    <light type="directional" name="directional_light_1">
+      <pose>5 5 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 -0.5 -1</direction>
+    </light>
+
+    <light type="point" name="point_light_1">
+      <pose>0 0 5 0 0 0</pose>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+    </light>
+
+  </world>
+</sdf>

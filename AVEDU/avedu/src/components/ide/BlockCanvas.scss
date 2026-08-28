@@ -1,0 +1,102 @@
+// components/ide/BlockCanvas.scss
+
+.block-canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #0b1020;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+
+  &__inner {
+    width: 100%;
+    height: 100%;
+  }
+
+  // Override ReactFlow default styles for neon theme.
+  // NOTE: this is a global (non-module) stylesheet, so `:global { }` would be
+  // invalid and silently drop every rule inside it. Write the `.react-flow__*`
+  // selectors directly instead.
+  .react-flow__background {
+    background-color: #0b1020;
+  }
+
+  .react-flow__edge-path {
+    stroke: rgba(125, 249, 255, 0.6);
+    stroke-width: 2px;
+  }
+
+  .react-flow__edge.selected .react-flow__edge-path {
+    stroke: #7df9ff;
+    stroke-width: 3px;
+  }
+
+  .react-flow__controls {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+
+    button {
+      background: rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e6f1ff;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(125, 249, 255, 0.15);
+      }
+
+      svg {
+        fill: currentColor;
+      }
+    }
+  }
+
+  .react-flow__minimap {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .react-flow__selection {
+    background: rgba(125, 249, 255, 0.1);
+    border: 1px solid rgba(125, 249, 255, 0.5);
+  }
+
+  // Selected node indicator: glowing border + small "light" dot on the corner.
+  // The card already paints its own box-shadow, so use !important to win over it.
+  .react-flow__node.selected {
+    .rf-card {
+      border-color: #7df9ff !important;
+      box-shadow: 0 0 0 1px #7df9ff, 0 0 14px rgba(125, 249, 255, 0.55) !important;
+    }
+
+    // Small light on the border (top-right corner)
+    &::after {
+      content: "";
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #7df9ff;
+      box-shadow: 0 0 8px 3px rgba(125, 249, 255, 0.9);
+      pointer-events: none;
+      z-index: 10;
+      animation: rf-selection-pulse 1.4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes rf-selection-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+}
+
+// Read-only mode
+.block-canvas--readonly {
+  .react-flow__controls {
+    display: none;
+  }
+}

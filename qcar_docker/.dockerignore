@@ -1,0 +1,22 @@
+# VCS / OS noise
+.git
+.gitignore
+.DS_Store
+
+# Python noise
+**/__pycache__/
+**/.pytest_cache/
+
+# ROS 2 / colcon artifacts
+qcar/rosws/build/
+qcar/rosws/install/
+qcar/rosws/log/
+
+# If you build elsewhere too:
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Logs & temp
+*.log
+*.tmp

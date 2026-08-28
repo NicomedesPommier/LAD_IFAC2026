@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lad-ingress
+  namespace: lad
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+    # WebSocket support for ROSBridge
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$remote_addr"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          # ROSBridge WebSocket - rewrite /lad/rosbridge to /
+          - path: /lad/rosbridge()(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lad-ros
+                port:
+                  number: 9090
+          # ROS static files (URDF, meshes) - rewrite /lad/ros-static/X to /X
+          - path: /lad/ros-static/(.*)()
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lad-ros
+                port:
+                  number: 7000
+          # Backend API
+          - path: /lad/(api)(/.*)?$
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lad-backend
+                port:
+                  number: 8000
+          # Backend Admin
+          - path: /lad/(admin)(/.*)?$
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lad-backend
+                port:
+                  number: 8000
+          # Frontend catch-all (must be last)
+          - path: /lad(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: lad-frontend
+                port:
+                  number: 3000

@@ -1,0 +1,65 @@
+// src/styles/components/_minigames.scss
+// Estilos propios de los mini juegos (src/minigames/**).
+// Todo lo demás (tarjetas, botones, rejillas) sale de pages/_slides.scss.
+// Aquí solo se usan variables del tema: nada de colores a mano, para que
+// [data-theme="light"] siga funcionando.
+
+.minigame {
+  &__progress {
+    width: 100%;
+    height: 6px;
+    margin-top: 0.5rem;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--bg-overlay);
+    border: 1px solid var(--border-light);
+  }
+
+  &__progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--neon);
+    box-shadow: 0 0 10px rgba(var(--neon-rgb), 0.45);
+    transition: width 0.25s ease;
+  }
+}
+
+.card-picker {
+  // La lista de opciones va en columna, no en fila como .slide-actions.
+  &__list {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  &__option {
+    // Texto a la izquierda: son etiquetas, no acciones centradas.
+    text-align: left;
+    justify-content: flex-start;
+    opacity: 0.7;
+
+    &.is-selected {
+      opacity: 1;
+      border-color: var(--neon);
+    }
+  }
+}
+
+// Opción ya resuelta dentro de un mini juego.
+// Nota: --success es un hex, así que rgba(var(--success), …) no es CSS válido;
+// usamos color-mix para atenuarlo sin necesidad de una variable --success-rgb.
+.btn.is-complete {
+  border-color: color-mix(in srgb, var(--success) 55%, transparent);
+}
+
+// Acción que confirma un acierto.
+.btn.is-success {
+  border-color: var(--success);
+  color: var(--success-light);
+}
+
+// _slides.scss define `--neon` sobre .slide-dot, no sobre .slide-text, así que
+// `.slide-text--neon` no tenía estilos. Lo añadimos aquí para resaltar código
+// dentro de un mini juego sin tocar la hoja compartida.
+.slide-text--neon {
+  color: var(--neon);
+}

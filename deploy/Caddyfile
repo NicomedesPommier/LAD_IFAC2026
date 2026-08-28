@@ -1,0 +1,115 @@
+# L.A.D single front door for cloudflared tunnel exposure.
+#
+#   browser --https--> Cloudflare edge --> cloudflared --http--> Caddy(:8088) --> app
+#
+# Caddy serves the built React app and reverse-proxies API / terminal WS / ROS to
+# local ports, all behind ONE shared basic-auth password. cloudflared terminates
+# TLS at the edge, so Caddy listens plain-http on :8088.
+#
+# SETUP
+#   1. Hash your beta password:
+#        caddy hash-password --plaintext 'YOUR_BETA_PASSWORD'
+#      Paste the resulting "$2a$14$..." hash below (replace REPLACE_WITH_BCRYPT_HASH).
+#   2. Build the frontend in same-origin mode (from AVEDU/avedu):
+#        REACT_APP_SAME_ORIGIN=1 npm run build
+#   3. Run Caddy FROM THE REPO ROOT so the relative build path resolves, with a
+#      random cookie secret that gates rosbridge/ros-static/wvs (see below):
+#        LAD_ROS_COOKIE="$(openssl rand -hex 24)" caddy run --config deploy/Caddyfile
+#   4. Point your cloudflared tunnel hostname (e.g. lad.smplecht.uk) at
+#        http://localhost:8088
+#      and set DJANGO_ALLOWED_HOSTS / DJANGO_EXTRA_ORIGINS in LAD/lad/.env to match.
+#
+# NOTE: older Caddy (<2.8) spells the directive `basicauth` instead of `basic_auth`.
+
+{
+	auto_https off
+	admin off
+}
+
+:8088 {
+	# ── Shared-password gate (SPA pages ONLY) ───────────────────────────────────
+	# basic_auth gates only the HTML/SPA. It deliberately does NOT cover:
+	#   /api, /ws        carry the app's `Authorization: Bearer <jwt>`. HTTP Basic
+	#                    auth uses the SAME header, so gating these returns 401 and
+	#                    triggers an endless "Sign in" popup (and breaks API calls
+	#                    like canvas creation). /api is invite-+JWT-gated, /ws is
+	#                    JWT-gated (?token=).
+	#   /rosbridge,/wvs  WebSocket endpoints. Browsers cannot attach credentials to
+	#                    a `new WebSocket()` handshake and do not reliably resend
+	#                    cached Basic creds on WS upgrades — so basic_auth here pops
+	#                    a Sign-in dialog that HANGS the connection (the simulator).
+	#   /ros-static      exempted too so mesh loads never prompt.
+	#
+	# rosbridge/ros-static/wvs have no auth of their own, and basic_auth can't cover
+	# a WebSocket. Instead we issue a cookie (lad_ros) on authenticated SPA loads and
+	# REQUIRE it on those routes below. Browsers send cookies on same-origin WS
+	# upgrades, so the SAME shared password now gates the robot too — no Cloudflare
+	# Access needed. (Access is still better if you need per-user identity/audit;
+	# then drop this cookie scheme and gate the whole hostname with Access instead.)
+	# Provide the secret via env when launching Caddy (keep it out of the repo):
+	#   LAD_ROS_COOKIE="$(openssl rand -hex 24)" caddy run --config deploy/Caddyfile
+	@gated not path /api/* /ws/* /rosbridge* /ros-static* /wvs*
+	basic_auth @gated {
+		beta REPLACE_WITH_BCRYPT_HASH
+	}
+
+	# Route map mirrors k8s/ingress.yaml — keep the two in sync when adding routes.
+	#
+	# ── Django: REST API, admin, WebSocket PTY terminal (keep the path prefix) ──
+	# header_up X-Forwarded-Proto https tells Django it is behind TLS (the
+	# Cloudflare edge), so SECURE_SSL_REDIRECT does not loop and secure cookies
+	# are issued. Matches SECURE_PROXY_SSL_HEADER in settings.py.
+	@backend path /api/* /admin/* /ws/*
+	handle @backend {
+		reverse_proxy localhost:8000 {
+			header_up X-Forwarded-Proto https
+		}
+	}
+
+	# ── rosbridge WebSocket (strip /rosbridge -> ws at :9090/) ──────────────────
+	# Require the lad_ros cookie (issued on authenticated page loads). No cookie =>
+	# 403, so the unauthenticated ROS socket is gated behind the shared password.
+	handle_path /rosbridge* {
+		@noros not header Cookie *lad_ros={$LAD_ROS_COOKIE}*
+		handle @noros {
+			respond 403
+		}
+		handle {
+			reverse_proxy localhost:9090
+		}
+	}
+
+	# ── ROS static files: URDF / meshes (strip /ros-static -> :7000/...) ────────
+	handle_path /ros-static* {
+		@nostatic not header Cookie *lad_ros={$LAD_ROS_COOKIE}*
+		handle @nostatic {
+			respond 403
+		}
+		handle {
+			reverse_proxy localhost:7000
+		}
+	}
+
+	# ── web_video_server camera stream (only if ENABLE_WVS=1) ───────────────────
+	handle_path /wvs* {
+		@nowvs not header Cookie *lad_ros={$LAD_ROS_COOKIE}*
+		handle @nowvs {
+			respond 403
+		}
+		handle {
+			reverse_proxy localhost:8080
+		}
+	}
+
+	# ── Everything else: the built single-page app (SPA fallback) ───────────────
+	# Run Caddy from the repo root, or override with the LAD_FRONTEND_BUILD env.
+	handle {
+		# Hand the rosbridge/ros-static cookie to authenticated users only (this
+		# block is reached only after basic_auth passes). Secure => HTTPS-only, so
+		# test via the tunnel, not plain-http localhost.
+		header +Set-Cookie "lad_ros={$LAD_ROS_COOKIE}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=43200"
+		root * {$LAD_FRONTEND_BUILD:AVEDU/avedu/build}
+		try_files {path} /index.html
+		file_server
+	}
+}

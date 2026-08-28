@@ -1,0 +1,11 @@
+# Compressed Image Transport Configuration
+# This config file sets compression parameters for better streaming performance
+
+/**:
+  ros__parameters:
+    # JPEG compression quality (0-100, higher = better quality but larger size)
+    # 80 is a good balance between quality and bandwidth
+    jpeg_quality: 80
+
+    # PNG compression level (0-9, higher = better compression but slower)
+    png_level: 3

@@ -1,0 +1,173 @@
+// =============================================================
+// FILE: src/components/UnityWebGL.scss
+// Unity WebGL container styling
+// =============================================================
+
+@use '../styles/variables' as *;
+
+.unity-webgl-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--shadow-md), inset 0 0 60px rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+
+  canvas {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    background: #231f20;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// Loading state
+.unity-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+  color: var(--text);
+
+  &__spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid var(--border);
+    border-top-color: var(--neon);
+    border-radius: 50%;
+    animation: unity-spin 1s linear infinite;
+  }
+
+  &__text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--neon);
+    text-shadow: 0 0 12px rgba(var(--neon-rgb), 0.3);
+  }
+
+  &__bar {
+    width: 100%;
+    max-width: 400px;
+    height: 8px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon), var(--neon2));
+    border-radius: 999px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 12px rgba(var(--neon-rgb), 0.6);
+  }
+}
+
+@keyframes unity-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Error state
+.unity-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--text);
+
+  h3 {
+    margin: 0;
+    color: var(--error);
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.9;
+    max-width: 400px;
+  }
+
+  .btn {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--border);
+    background: var(--glass);
+    color: var(--text);
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      border-color: var(--neon);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Light mode
+[data-theme="light"] {
+  .unity-webgl-container {
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .unity-loading__text {
+    text-shadow: none;
+  }
+
+  .unity-loading__bar {
+    background: #e2e8f0;
+  }
+
+  .unity-loading__bar-fill {
+    box-shadow: none;
+  }
+
+  .unity-webgl-container canvas {
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+// Responsive
+@media (max-width: 1024px) {
+  .unity-webgl-container {
+    padding: 0.75rem;
+
+    canvas {
+      max-width: 100%;
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+}
+
+// Motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .unity-loading__spinner {
+    animation: none;
+  }
+
+  .unity-loading__bar-fill {
+    transition: none;
+  }
+}

@@ -1,0 +1,731 @@
+@use './variables' as *;
+
+/* ========= layout 3 franjas ========= */
+.rfp-wrap {
+  display: grid;
+  grid-template-rows: auto minmax(420px, 60vh) auto;
+  gap: .75rem;
+}
+
+/* ---------- Palette (top) ---------- */
+.rfp-palette {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: .4rem .6rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  min-height: 56px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.rfp-palette__inner {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+/* ---------- Canvas (middle) ---------- */
+.rfp-canvas {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-overlay);
+  overflow: hidden;
+  min-height: 420px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.rfp-canvas__inner {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Terminal (bottom) ---------- */
+.rfp-terminal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: .6rem .75rem;
+  display: grid;
+  gap: .5rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.rfp-terminal__title {
+  font-weight: 700;
+}
+.rfp-terminal__code {
+  margin: 0;
+  padding: .6rem .75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.rfp-terminal__actions { display: flex; gap: .5rem; }
+.rfp-terminal__hint { opacity: .85; }
+
+/* ========= utilitarios (inputs, cards, chips) ========= */
+.rf-card {
+  min-width: 320px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.rf-card__title {
+  padding: .5rem .75rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+}
+.rf-card__body { padding: .6rem .75rem; display: grid; gap: .5rem; }
+.rf-field { display: grid; gap: .25rem; }
+.rf-row { display: flex; gap: .4rem; }
+.rf-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+
+.rf-input {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  color: var(--text);
+  padding: .4rem .55rem;
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+.rf-input:focus {
+  border-color: rgba(var(--neon-rgb),.55);
+  box-shadow: 0 0 0 2px rgba(var(--neon-rgb),.18);
+}
+
+.rf-chips { display: flex; gap: .35rem; flex-wrap: wrap; }
+.rf-chip {
+  background: rgba(var(--neon-rgb),.12);
+  border: 1px solid rgba(var(--neon-rgb),.35);
+  color: var(--text);
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  font-size: .9rem;
+  user-select: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.rf-chip:hover { border-color: rgba(var(--neon-rgb),.65); box-shadow: 0 0 10px rgba(var(--neon-rgb),.22); }
+.rf-chip--ghost { opacity: .6; cursor: default; }
+
+[data-theme="light"] {
+  .rf-chip:hover {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* botones (usa tu tema si ya lo tienes) */
+.btn {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--glass);
+  color: var(--text);
+  border-radius: 10px;
+  padding: .4rem .75rem;
+  font: inherit;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--neon-rgb),.55);
+  box-shadow: 0 8px 18px rgba(var(--neon-rgb),.25), 0 0 24px rgba(var(--neon2-rgb),.12) inset;
+}
+
+[data-theme="light"] {
+  .btn:hover {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* ========= Handle styling with labels ========= */
+.react-flow__handle {
+  width: 20px !important;
+  height: 20px !important;
+  border: 3px solid var(--neon) !important;
+  background: transparent !important;
+}
+
+.react-flow__handle:hover {
+  border-color: var(--neon) !important;
+  box-shadow: 0 0 12px var(--neon);
+}
+
+.react-flow__handle-left {
+  left: -10px;
+}
+
+.react-flow__handle-right {
+  right: -10px;
+}
+
+/* Handle label styling */
+.rf-handle-label {
+  position: absolute;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  /* Resting: readable so you can tell handles apart without hovering.
+     Hover brightens to full. */
+  opacity: 0.65;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  z-index: 1000;
+}
+
+.react-flow__handle:hover + .rf-handle-label {
+  opacity: 1;
+  color: var(--text);
+}
+
+/* Small inline dot placed before a field label to signal that the field is
+   fed by a connection handle, color-matched to that handle. */
+.rf-conn-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  border: 2px solid currentColor;
+  background: transparent;
+}
+.rf-conn-dot--blue   { color: #2196f3; }
+.rf-conn-dot--purple { color: #9c27b0; }
+.rf-conn-dot--green  { color: #4caf50; }
+.rf-conn-dot--orange { color: #ff9800; }
+.rf-conn-dot--red    { color: #f44336; }
+
+.rf-handle-label--left {
+  left: -10px;
+  transform: translate(-100%, -50%);
+  padding-right: 8px;
+}
+
+.rf-handle-label--right {
+  right: -10px;
+  transform: translate(100%, -50%);
+  padding-left: 8px;
+}
+
+/* Handle color overrides via data attributes */
+.react-flow__handle[data-handlecolor="orange"] {
+  border-color: #ff9800 !important;
+}
+
+.react-flow__handle[data-handlecolor="blue"] {
+  border-color: #2196f3 !important;
+}
+
+.react-flow__handle[data-handlecolor="red"] {
+  border-color: #f44336 !important;
+}
+
+.react-flow__handle[data-handlecolor="green"] {
+  border-color: #4caf50 !important;
+}
+
+.react-flow__handle[data-handlecolor="purple"] {
+  border-color: #9c27b0 !important;
+}
+
+.react-flow__handle[data-handlecolor="cyan"] {
+  border-color: #00bcd4 !important;
+}
+
+.react-flow__handle[data-handlecolor="yellow"] {
+  border-color: #ffeb3b !important;
+}
+
+.react-flow__handle[data-handlecolor="orange"]:hover {
+  box-shadow: 0 0 12px #ff9800;
+}
+
+.react-flow__handle[data-handlecolor="blue"]:hover {
+  box-shadow: 0 0 12px #2196f3;
+}
+
+.react-flow__handle[data-handlecolor="red"]:hover {
+  box-shadow: 0 0 12px #f44336;
+}
+
+.react-flow__handle[data-handlecolor="green"]:hover {
+  box-shadow: 0 0 12px #4caf50;
+}
+
+.react-flow__handle[data-handlecolor="purple"]:hover {
+  box-shadow: 0 0 12px #9c27b0;
+}
+
+.react-flow__handle[data-handlecolor="cyan"]:hover {
+  box-shadow: 0 0 12px #00bcd4;
+}
+
+.react-flow__handle[data-handlecolor="yellow"]:hover {
+  box-shadow: 0 0 12px #ffeb3b;
+}
+
+/* Collapsible input field styling */
+.rf-field--collapsible {
+  display: grid;
+  gap: .25rem;
+}
+
+.rf-field--collapsible .rf-field__label {
+  /* Label always visible */
+  opacity: 1;
+  transition: none;
+}
+
+.rf-field--collapsible .rf-field__input-wrapper {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+  max-height: 100px;
+}
+
+.rf-field--collapsed .rf-field__input-wrapper {
+  max-height: 0 !important;
+  opacity: 0;
+  margin: 0 !important;
+}
+
+/* Add padding to card body to create space from handles */
+.rf-card__body {
+  padding: .6rem 2rem .6rem .75rem;
+}
+
+/* Tabbed palette styling */
+.rfp-palette--tabbed {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 0.5rem;
+}
+
+.rfp-palette__tabs {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+
+.rfp-palette__tab {
+  cursor: pointer;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.rfp-palette__tab:hover {
+  background: var(--glass);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.rfp-palette__tab--active {
+  background: var(--glass);
+  color: var(--neon);
+  border-color: var(--neon);
+  box-shadow: 0 0 8px rgba(var(--neon-rgb), 0.25);
+}
+
+.rfp-palette__tab--custom {
+  color: var(--neon);
+  opacity: 0.9;
+}
+
+/* "+ New Node" button — sits at the end of the tab row */
+.rfp-palette__new-node-btn {
+  margin-left: auto;
+  color: var(--neon) !important;
+  border-color: rgba(var(--neon-rgb), 0.4) !important;
+  background: rgba(var(--neon-rgb), 0.08) !important;
+  font-weight: 600;
+
+  &:hover {
+    background: rgba(var(--neon-rgb), 0.18) !important;
+    border-color: var(--neon) !important;
+    box-shadow: 0 0 10px rgba(var(--neon-rgb), 0.3);
+  }
+}
+
+[data-theme="light"] {
+  .rfp-palette__tab--active {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* ========= Geometry Node - Mesh Upload UI ========= */
+.rf-btn-group {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--bg-overlay);
+  border-radius: 8px;
+  padding: 0.25rem;
+  border: 1px solid var(--border-light);
+}
+
+.rf-btn-tab {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  flex: 1;
+  text-align: center;
+
+  &:hover {
+    background: var(--bg-surface);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  &.active {
+    background: rgba(var(--neon-rgb), 0.15);
+    color: var(--neon);
+    border-color: var(--neon);
+    box-shadow: 0 0 8px rgba(var(--neon-rgb), 0.2);
+  }
+}
+
+.rf-btn {
+  appearance: none;
+  background: rgba(var(--neon-rgb), 0.1);
+  border: 1px solid var(--border);
+  color: var(--neon);
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: rgba(var(--neon-rgb), 0.2);
+    box-shadow: 0 0 12px rgba(var(--neon-rgb), 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: rgba(var(--neon-rgb), 0.2);
+    border-color: var(--neon);
+  }
+}
+
+.rf-upload-status {
+  padding: 0.4rem 0.6rem;
+  background: rgba(var(--neon-rgb), 0.1);
+  border: 1px solid rgba(var(--neon-rgb), 0.3);
+  border-radius: 6px;
+  color: var(--neon);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 0.25rem;
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.rf-mesh-display {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 0.6rem;
+
+  code {
+    color: var(--neon2);
+    font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+    font-size: 0.85rem;
+    word-break: break-all;
+  }
+}
+
+[data-theme="light"] {
+  .rf-btn-tab.active {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .rf-btn:hover:not(:disabled) {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* =========================================================================
+ * Block utilities (used by blocks/components/*)
+ *
+ * Conventions:
+ *   .rf-card             — base node card (already defined above)
+ *   .rf-card--{size}     — width modifier  (sm 220 / md 260 / lg 320)
+ *   .rf-card__title--{accent}  — colored title bar
+ *   .rf-card__body--stack      — flex column body with consistent gap
+ *   .rf-info-badge[--{accent}] — small caption strip at the bottom of a node
+ *   .rf-formula                — monospace formula box
+ *   .rf-keyboard               — WASD/arrow key visualizer
+ *   .rf-stack[--tight|--loose] — vertical flex layouts
+ * ========================================================================= */
+
+/* ── Card size modifiers ──────────────────────────────────────────────────── */
+.rf-card--sm  { min-width: 220px; }
+.rf-card--md  { min-width: 260px; }
+.rf-card--lg  { min-width: 320px; }
+.rf-card--xl  { min-width: 380px; }
+
+/* ── Card accent variants ─────────────────────────────────────────────────── *
+ * The accent class lives on the card root (so CSS variables cascade to the
+ * body and title alike). The title picks up its background/color from the
+ * same variables via the rule below. */
+.rf-card--accent-orange {
+  --rf-accent: #ffaa44;
+  --rf-accent-bg: #1a0f00;
+  --rf-accent-border: #5a3a05;
+  --rf-accent-dim: #7a5a2a;
+  --rf-accent-title-bg: #2a1a05;
+}
+.rf-card--accent-amber {
+  --rf-accent: #ffb347;
+  --rf-accent-bg: #1a0f00;
+  --rf-accent-border: #5a3a00;
+  --rf-accent-dim: #9a7a4a;
+  --rf-accent-title-bg: #3a2000;
+}
+.rf-card--accent-green {
+  --rf-accent: #7df9aa;
+  --rf-accent-bg: #0d1f17;
+  --rf-accent-border: #1e4d33;
+  --rf-accent-dim: #7a9a8a;
+  --rf-accent-title-bg: #1a3a2a;
+}
+.rf-card--accent-blue {
+  --rf-accent: #7da9f9;
+  --rf-accent-bg: #060f1f;
+  --rf-accent-border: #1e334d;
+  --rf-accent-dim: #6a8aaa;
+  --rf-accent-title-bg: #0f1f3a;
+}
+.rf-card--accent-red {
+  --rf-accent: #ff7d7d;
+  --rf-accent-bg: #1f0606;
+  --rf-accent-border: #4d1e1e;
+  --rf-accent-dim: #aa6a6a;
+  --rf-accent-title-bg: #3a0f0f;
+}
+.rf-card--accent-purple {
+  --rf-accent: #c97df9;
+  --rf-accent-bg: #170622;
+  --rf-accent-border: #3d1e4d;
+  --rf-accent-dim: #8a6aaa;
+  --rf-accent-title-bg: #2a0f3a;
+}
+
+/* When the card has an accent, the title strip paints with it. */
+[class*="rf-card--accent-"] > .rf-card__title {
+  background: var(--rf-accent-title-bg);
+  color: var(--rf-accent);
+}
+
+/* ── Card body layouts ────────────────────────────────────────────────────── */
+.rf-card__body--stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.rf-card__body--stack-loose { gap: 0.55rem; }
+
+/* ── Generic stacks (use outside .rf-card__body when needed) ─────────────── */
+.rf-stack        { display: flex; flex-direction: column; gap: 0.5rem; }
+.rf-stack--tight { gap: 0.25rem; }
+.rf-stack--loose { gap: 0.75rem; }
+
+/* ── Info badge (caption strip) ──────────────────────────────────────────── */
+.rf-info-badge {
+  background: var(--rf-accent-bg, var(--bg-surface));
+  border: 1px solid var(--rf-accent-border, var(--border-light));
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.65rem;
+  color: var(--rf-accent-dim, var(--text-dim));
+  line-height: 1.5;
+
+  code {
+    font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+    color: var(--rf-accent, var(--text));
+  }
+}
+.rf-info-badge--xs {
+  font-size: 0.63rem;
+  line-height: 1.7;
+}
+
+/* ── Formula box ──────────────────────────────────────────────────────────── */
+.rf-formula {
+  background: var(--rf-accent-bg, var(--bg-surface));
+  border: 1px solid var(--rf-accent-border, var(--border-light));
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 0.72rem;
+  color: var(--rf-accent, var(--text));
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ── Range slider — picks up parent accent ───────────────────────────────── */
+.rf-range {
+  accent-color: var(--rf-accent, var(--neon));
+  width: 100%;
+}
+
+/* ── Keyboard visualizer (KeyboardInputNode, QCarTeleopNode) ─────────────── */
+.rf-keyboard {
+  background: var(--rf-accent-bg, var(--bg-surface));
+  border: 1px solid var(--rf-accent-border, var(--border-light));
+  border-radius: 6px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.rf-keyboard__row {
+  display: flex;
+  gap: 0.2rem;
+}
+.rf-keyboard__key {
+  width: 32px;
+  height: 28px;
+  background: var(--rf-accent-bg, var(--bg-surface));
+  border: 1px solid var(--rf-accent-border, var(--border-light));
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--rf-accent, var(--text));
+  font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+  user-select: none;
+
+  /* Lighten key over wrapper background so it reads as a "key" */
+  filter: brightness(1.4);
+}
+.rf-keyboard__key--wide {
+  width: 72px;
+  font-size: 0.65rem;
+}
+.rf-keyboard__legend {
+  margin-top: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.6rem;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  justify-content: center;
+}
+.rf-keyboard__legend-item { white-space: nowrap; }
+.rf-keyboard__legend-key  { color: var(--rf-accent, var(--text)); font-weight: bold; }
+
+/* ── Range row with inline value pill ─────────────────────────────────────── */
+.rf-field__value {
+  color: var(--rf-accent, var(--text));
+  font-weight: 600;
+  margin-left: 0.35rem;
+}
+
+/* ── 3-column grid (XYZ / RPY vectors) ────────────────────────────────────── */
+.rf-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.3rem;
+}
+
+/* ── Hint text (small dim caption under a field) ─────────────────────────── */
+.rf-hint {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 0.2rem;
+}
+.rf-hint--warn  { color: #ffaa44; opacity: 0.9; }
+.rf-hint--error { color: #ff7d7d; opacity: 0.9; }
+
+/* ── Boxed callout (titled info panel) ───────────────────────────────────── */
+.rf-info-card {
+  background: rgba(var(--neon-rgb), 0.08);
+  border: 1px solid rgba(var(--neon-rgb), 0.3);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.8rem;
+}
+.rf-info-card__title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.rf-info-card__body { opacity: 0.9; }
+
+/* Accent-aware variant — picks up the parent NodeCard's accent via vars. */
+[class*="rf-card--accent-"] .rf-info-card {
+  background: color-mix(in srgb, var(--rf-accent, var(--neon)) 12%, transparent);
+  border-color:  color-mix(in srgb, var(--rf-accent, var(--neon)) 35%, transparent);
+}
+
+/* Explicit tones for when there's no parent accent. */
+.rf-info-card--orange { background: rgba(255, 152, 0, 0.1); border-color: rgba(255, 152, 0, 0.3); }
+.rf-info-card--blue   { background: rgba(33, 150, 243, 0.1); border-color: rgba(33, 150, 243, 0.3); }
+.rf-info-card--cyan   { background: rgba(0, 188, 212, 0.1); border-color: rgba(0, 188, 212, 0.3); }
+.rf-info-card--green  { background: rgba(76, 175, 80, 0.1);  border-color: rgba(76, 175, 80, 0.3); }
+.rf-info-card--red    { background: rgba(244, 67, 54, 0.1);  border-color: rgba(244, 67, 54, 0.3); }
+
+/* ── Vector readout (used by CenterMass-style "calculated" displays) ─────── */
+.rf-vector-readout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+  font-size: 0.85em;
+}
+.rf-vector-readout__cell { text-align: left; }
+.rf-vector-readout__label { opacity: 0.7; font-size: 0.8em; }
+.rf-vector-readout__value { font-weight: 700; color: var(--rf-accent, var(--neon)); }
+
+/* responsive */
+@media (max-width: 980px) {
+  .rf-grid-2 { grid-template-columns: 1fr; }
+  .rfp-wrap { grid-template-rows: auto 52vh auto; }
+
+  .rf-btn-group {
+    flex-wrap: wrap;
+  }
+
+  .rf-btn-tab {
+    min-width: 60px;
+  }
+}

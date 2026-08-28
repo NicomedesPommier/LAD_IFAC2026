@@ -1,0 +1,389 @@
+// Map Runner component styles
+// Tiling panel layout: map sidebar + dock bar + 3-D canvas + docked widgets.
+// Theme-aware — all colors resolve to the CSS variables in _variables.scss so
+// the simulator follows light / dark mode.
+
+@use '../variables' as *;
+
+// ── Root layout ────────────────────────────────────────────────────────────────
+.map-runner {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  &__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+  }
+
+  &__empty-text {
+    color: var(--text-muted);
+    font-family: monospace;
+    font-size: 13px;
+  }
+
+  // cmd_vel badge overlaid on the canvas
+  &__cmdvel-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    z-index: 5;
+    background: var(--bg-overlay);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 3px 7px;
+    font-size: 9px;
+    font-family: monospace;
+    color: var(--success);
+    pointer-events: none;
+
+    &--inactive {
+      color: var(--error);
+    }
+  }
+
+  &__canvas-panel {
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+// ── Map selector sidebar ─────────────────────────────────────────────────────────
+.map-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  padding: 12px;
+  border-right: 1px solid var(--border-light);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__title {
+    margin: 0;
+    color: var(--info);
+    font-size: 13px;
+  }
+
+  &__select {
+    width: 100%;
+    padding: 5px;
+    border-radius: 4px;
+    background: var(--bg-tertiary);
+    color: var(--text);
+    border: 1px solid var(--border);
+    font-size: 11px;
+  }
+
+  &__load-btn {
+    padding: 7px;
+    background: var(--info);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+
+    &:disabled {
+      background: var(--bg-tertiary);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+  }
+
+  &__info {
+    padding: 8px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.7;
+
+    b {
+      color: var(--text-dim);
+    }
+  }
+
+  &__reset-btn {
+    padding: 7px;
+    background: var(--neon2);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+    transition: filter 0.15s ease;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}
+
+// ── Panel dock bar ───────────────────────────────────────────────────────────────
+.panel-dock {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+  user-select: none;
+
+  &__label {
+    font-size: 10px;
+    font-family: monospace;
+    color: var(--text-muted);
+    margin-right: 4px;
+    letter-spacing: 0.08em;
+  }
+
+  &__extras {
+    margin-left: auto;
+    display: flex;
+    gap: 5px;
+  }
+}
+
+// ── Toggle pill (dock buttons + cam/lidar viz toggles) ───────────────────────────
+.toggle-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 10px;
+  background: var(--glass);
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: var(--glass-hover);
+  }
+
+  &--active {
+    background: rgba(var(--neon-rgb), 0.15);
+    border: 1px solid rgba(var(--neon-rgb), 0.35);
+    color: var(--neon);
+  }
+
+  // accent variants for the extra viz toggles
+  &--accent-cam.toggle-pill--active {
+    background: rgba(var(--neon-rgb), 0.15);
+    border-color: rgba(var(--neon-rgb), 0.35);
+    color: var(--neon);
+  }
+
+  &--accent-lidar.toggle-pill--active {
+    background: rgba(var(--warning-light), 0.15);
+    border-color: rgba(255, 200, 80, 0.35);
+    color: var(--warning);
+  }
+
+  &__close {
+    opacity: 0.5;
+    font-size: 9px;
+    margin-left: 2px;
+  }
+}
+
+// ── Widget shell (title bar + content) ───────────────────────────────────────────
+.widget-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+
+  &--right {
+    border-left: 1px solid var(--border-light);
+  }
+
+  &--bottom {
+    border-top: 1px solid var(--border-light);
+  }
+
+  &__titlebar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 6px 3px 10px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  &__title {
+    flex: 1;
+    font-size: 10px;
+    font-family: monospace;
+    color: var(--text-muted);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: color 0.15s ease;
+
+    &--move:hover {
+      color: var(--neon);
+    }
+
+    &--close:hover {
+      color: var(--error-light);
+    }
+  }
+
+  &__content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+}
+
+// ── Multi-camera widget ──────────────────────────────────────────────────────────
+.multi-camera {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 4px;
+  background: var(--bg-primary);
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  &__cell {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+    min-height: 0;
+
+    &--inactive {
+      border-color: var(--border);
+      opacity: 0.85;
+    }
+  }
+
+  &__label-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 6px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: 10px;
+    font-family: monospace;
+    font-weight: bold;
+    color: var(--neon);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &--inactive {
+      color: var(--text-muted);
+    }
+  }
+
+  &__hz {
+    font-size: 9px;
+    font-family: monospace;
+    color: rgba(var(--neon-rgb), 0.7);
+  }
+
+  &__image-area {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-family: monospace;
+    color: var(--text-muted);
+  }
+}
+
+// ── Resize handle ────────────────────────────────────────────────────────────────
+.resize-handle {
+  position: relative;
+  flex-shrink: 0;
+  background: var(--bg-primary);
+
+  &--horizontal {
+    width: 5px;
+    cursor: col-resize;
+    border-left: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+  }
+
+  &--vertical {
+    height: 5px;
+    cursor: row-resize;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  &__grip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--border-focus);
+    border-radius: 2px;
+  }
+
+  &--horizontal &__grip {
+    width: 3px;
+    height: 24px;
+  }
+
+  &--vertical &__grip {
+    width: 24px;
+    height: 3px;
+  }
+}

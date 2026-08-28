@@ -1,0 +1,286 @@
+/* =============================================================
+   turtlesim.scss — Neon + Glass, accesible y responsive
+   ============================================================= */
+@use '../variables' as *;
+
+/* Respeta reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .tsim-btn, .btn, .tsim-select, .tsim-input, .tsim-panel { transition: none !important; }
+}
+
+/* ===== Pantalla ===== */
+.tsim-screen {
+  min-height: 100vh;
+  background: linear-gradient(120deg, var(--bg-primary), var(--bg-secondary), var(--bg-tertiary));
+  background-size: 200% 200%;
+  color: var(--text);
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===== Header ===== */
+.tsim-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tsim-title {
+  margin: 0;
+  letter-spacing: .12em;
+  text-shadow: 0 0 12px var(--neon), 0 0 26px var(--neon2), 0 0 48px rgba(var(--neon-rgb),.25);
+}
+.tsim-header__spacer { flex: 1; }
+.tsim-header__active { opacity: .9; font-size: .95rem; }
+
+/* ===== Layout principal ===== */
+.tsim-layout {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Canvas card */
+.tsim-canvasCard {
+  flex: 1 1 520px;
+  min-width: 320px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--bg-overlay);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(6px);
+  padding: 12px;
+  display: flex;
+}
+
+/* Wrapper del canvas (rectangular y responsive) */
+.tsim-canvasWrap {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  height: clamp(260px, 550px , 700px);
+  margin: 0 auto;
+}
+
+.tsim-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 12px;
+  background: var(--terminal-bg);
+  border: 1px solid var(--border-light);
+}
+
+/* Panel derecho */
+.tsim-panel {
+  flex: 0 0 300px;
+  height: 80vh;
+  max-width: 420px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Controls panel container */
+.tsim-controlsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Filas / controles */
+.tsim-row { display: flex; flex-direction: column; gap: 8px; }
+.tsim-row--inline { flex-direction: row; align-items: center; gap: 10px; }
+
+.tsim-label {
+  letter-spacing: .18em;
+  opacity: .9;
+  min-width: 88px;
+}
+
+.tsim-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.tsim-hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  color: var(--neon);
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+}
+
+/* Controles / botones base */
+.tsim-btn, .btn, .tsim-select, .tsim-input {
+  font: inherit; color: var(--text);
+  background: var(--glass);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: .6rem .8rem;
+  outline: none;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+}
+
+.tsim-btn:hover:not([disabled]), .btn:hover:not([disabled]) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--neon);
+}
+.tsim-btn:focus-visible, .btn:focus-visible, .tsim-select:focus-visible, .tsim-input:focus-visible {
+  border-color: var(--neon2);
+  box-shadow: 0 0 0 3px rgba(var(--neon2-rgb),.28);
+}
+.tsim-btn[disabled], .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+.tsim-select, .tsim-input { width: 100%; }
+.tsim-spawn { display: flex; gap: 8px; align-items: center; }
+
+/* ===== Objetivos (chips) ===== */
+.tsim-objectives {
+  margin:.35rem 0 .2rem;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.35rem .6rem;
+}
+
+.tsim-objectives li{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  padding:.25rem .55rem;
+  border:1px solid var(--border-light);
+  background: var(--glass);
+  border-radius:999px;
+  font-size:.9rem;
+  letter-spacing:.02em;
+  color:var(--text);
+  opacity:.9;
+}
+
+.tsim-objectives li .dot{
+  width:.5rem;height:.5rem;border-radius:50%;
+  background: var(--text-muted);
+  box-shadow:0 0 0 1px var(--border-light) inset;
+}
+
+.tsim-objectives li .check{
+  margin-left:.25rem;
+  font-weight:700;
+  text-shadow:0 0 8px var(--neon);
+}
+
+.tsim-objectives li.done{
+  border-color: rgba(var(--neon-rgb),.45);
+  background: rgba(var(--neon-rgb),.08);
+  box-shadow:0 0 14px rgba(var(--neon-rgb),.15) inset;
+}
+.tsim-objectives li.done .dot{
+  background:var(--neon);
+  box-shadow:0 0 10px var(--neon);
+}
+
+/* ===== Badge de estado (esquina) ===== */
+.tsim-status {
+  position: fixed;
+  right: 16px; bottom: 16px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(6px);
+}
+.tsim-status.ok   { color: var(--success-light); border-color: var(--success); box-shadow: 0 0 18px rgba(22,163,74,.25); }
+.tsim-status.down { color: var(--error-light); border-color: var(--error); box-shadow: 0 0 18px rgba(220,38,38,.25); }
+
+/* ===== ROS Topics Info Card ===== */
+.tsim-topicsInfo {
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-overlay);
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  display: grid;
+  gap: 4px;
+
+  strong {
+    color: var(--neon);
+  }
+
+  code {
+    color: var(--neon2);
+    background: rgba(var(--neon2-rgb),0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 980px) {
+  .tsim-layout { flex-direction: column; }
+  .tsim-panel  { flex-basis: auto; width: 100%; height: auto; max-width: none; }
+  .tsim-row--inline { flex-direction: column; align-items: stretch; }
+  .tsim-controlsPanel { gap: 12px; }
+}
+
+/* ========= LIGHT THEME OVERRIDES ========= */
+[data-theme="light"] {
+  .tsim-title {
+    text-shadow: none;
+  }
+
+  .tsim-canvasCard {
+    background: var(--bg-secondary);
+    backdrop-filter: none;
+  }
+
+  .tsim-canvas {
+    background: #ffffff;
+  }
+
+  .tsim-panel {
+    background: var(--bg-secondary);
+    backdrop-filter: none;
+  }
+
+  .tsim-objectives li .check {
+    text-shadow: none;
+  }
+
+  .tsim-objectives li.done {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tsim-objectives li.done .dot {
+    box-shadow: none;
+  }
+
+  .tsim-status {
+    backdrop-filter: none;
+    background: var(--bg-secondary);
+  }
+
+  .tsim-status.ok {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tsim-status.down {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tsim-topicsInfo {
+    background: #f8fafc;
+  }
+}

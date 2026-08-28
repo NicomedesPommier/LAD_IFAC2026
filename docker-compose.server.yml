@@ -1,0 +1,138 @@
+# =============================================================================
+# L.A.D. Docker Compose - Server Deployment
+# Alternative to Kubernetes for simpler deployments
+# =============================================================================
+
+services:
+  # ===========================================================================
+  # Frontend - React Application
+  # ===========================================================================
+  frontend:
+    image: registry.gitlab.com/YOUR_GROUP/lad-frontend:latest
+    container_name: lad-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_BASE=/api
+    depends_on:
+      - backend
+    networks:
+      - lad-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===========================================================================
+  # Backend - Django REST API
+  # ===========================================================================
+  backend:
+    image: registry.gitlab.com/YOUR_GROUP/lad-backend:latest
+    container_name: lad-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_DEBUG=false
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-change-me-in-production}
+      - DJANGO_ALLOWED_HOSTS=localhost,backend,lad-backend,*
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
+    volumes:
+      - backend-data:/app/data
+      - backend-static:/app/static_collected
+      - ./config:/config:ro
+    depends_on:
+      - ros
+    networks:
+      - lad-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===========================================================================
+  # ROS - ROS 2 Humble with Gazebo
+  # ===========================================================================
+  ros:
+    image: registry.gitlab.com/YOUR_GROUP/lad-ros:latest
+    container_name: lad-ros
+    restart: unless-stopped
+    ports:
+      - "9090:9090"   # rosbridge WebSocket
+      - "7000:7000"   # Static URDF/meshes server
+      - "8080:8080"   # Web Video Server
+      - "10000:10000" # Unity TCP Endpoint
+    environment:
+      - CORS_ALLOW_ORIGIN=http://localhost:3000,http://frontend:3000
+      - ENABLE_JSP=1
+      - ENABLE_ROSAPI=1
+      - ENABLE_WVS=1
+      - ENABLE_TURTLESIM=1
+      - ENABLE_GAZEBO=1
+      - ENABLE_DUMMY_CAMERAS=0
+      - ENABLE_UNITY_TCP=1
+      - UNITY_TCP_PORT=10000
+      - GAZEBO_WORLD=/ros2_ws/src/qcar_bringup/worlds/simple_track.world
+      - IP_CONFIG_PATH=/config/ip_config.json
+    volumes:
+      - user-workspaces:/workspaces
+      - ./config/ip_config.json:/config/ip_config.json:ro
+    networks:
+      - lad-network
+    # Resource caps: bound the shared ROS/Gazebo container so a runaway (busy
+    # node, fork bomb in a user's shell, or an introspection storm) can't starve
+    # the host. Gazebo is heavy, so this allows more headroom than the dev compose.
+    deploy:
+      resources:
+        limits:
+          cpus: "6.0"
+          memory: 6G
+          pids: 1024
+        # GPU support — uncomment if a GPU is available.
+        # reservations:
+        #   devices:
+        #     - driver: nvidia
+        #       count: all
+        #       capabilities: [gpu]
+
+  # ===========================================================================
+  # Nginx Reverse Proxy (Optional)
+  # ===========================================================================
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: lad-nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./certs:/etc/nginx/certs:ro
+  #   depends_on:
+  #     - frontend
+  #     - backend
+  #     - ros
+  #   networks:
+  #     - lad-network
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+volumes:
+  backend-data:
+    driver: local
+  backend-static:
+    driver: local
+  user-workspaces:
+    driver: local
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+networks:
+  lad-network:
+    driver: bridge

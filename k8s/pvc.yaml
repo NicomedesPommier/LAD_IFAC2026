@@ -1,0 +1,59 @@
+# =============================================================================
+# L.A.D. Persistent Volume Claims
+# Storage for database, static files, and user workspaces
+# =============================================================================
+
+---
+# Backend database storage (SQLite or data directory)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lad-backend-data-pvc
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  # Uncomment and set if you have a specific storage class
+  # storageClassName: standard
+
+---
+# Backend static files
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lad-backend-static-pvc
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+# User workspaces for IDE
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lad-user-workspaces-pvc
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+    # Use ReadWriteMany if running multiple ROS replicas
+    # - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi

@@ -1,0 +1,313 @@
+// styles/components/_urdf-viewer.scss
+// URDF Viewer component styles for IDE sidebar
+
+@use '../variables' as *;
+
+.urdf-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-surface);
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--ide-border);
+    transition: background 0.3s ease;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--neon);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  &__toggle-btn,
+  &__settings-btn {
+    background: transparent;
+    border: 1px solid var(--ide-border);
+    color: var(--ide-text-muted);
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    &:hover {
+      border-color: var(--neon);
+      color: var(--neon);
+      background: rgba(125, 249, 255, 0.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &--active {
+      border-color: var(--neon);
+      background: rgba(125, 249, 255, 0.15);
+      color: var(--neon);
+      font-weight: 600;
+
+      &:hover {
+        background: rgba(125, 249, 255, 0.25);
+      }
+    }
+  }
+
+  &__settings {
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--ide-border);
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: slideDown 0.2s ease;
+  }
+
+  &__setting {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--ide-text);
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover:not(:has(input:disabled)) {
+      color: var(--neon);
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: var(--neon);
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
+      }
+    }
+
+    input[type="range"] {
+      flex: 1;
+      cursor: pointer;
+      accent-color: var(--neon);
+      height: 4px;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
+      }
+    }
+
+    span {
+      &:first-child {
+        flex: 1;
+      }
+
+      &:last-child {
+        font-family: 'Courier New', monospace;
+        color: var(--neon);
+        font-size: 0.75rem;
+        min-width: 60px;
+        text-align: right;
+      }
+    }
+  }
+
+  &__frames-section {
+    border-top: 1px solid var(--ide-border);
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  &__frames-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--neon);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__frames-actions {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  &__frame-action-btn {
+    background: transparent;
+    border: 1px solid var(--ide-border);
+    color: var(--ide-text-muted);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--neon);
+      color: var(--neon);
+      background: rgba(125, 249, 255, 0.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__frames-list {
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--ide-bg);
+    border: 1px solid var(--ide-border);
+    border-radius: 4px;
+    padding: 0.25rem;
+  }
+
+  &__frame-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(125, 249, 255, 0.1);
+    }
+
+    input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      cursor: pointer;
+      accent-color: var(--neon);
+    }
+  }
+
+  &__frame-name {
+    flex: 1;
+    font-family: 'Courier New', monospace;
+    color: var(--ide-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__frame-parent {
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--ide-text-muted);
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  &__frames-message {
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--ide-text-muted);
+    background: var(--ide-bg);
+    border: 1px dashed var(--ide-border);
+    border-radius: 4px;
+    margin-top: 0.5rem;
+  }
+
+  &__canvas {
+    flex: 1;
+    position: relative;
+    background: var(--ide-bg);
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+
+  &__message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 2rem;
+    text-align: center;
+    color: var(--ide-text-muted);
+    font-size: 0.9rem;
+    gap: 1rem;
+
+    &--error {
+      color: var(--error-light);
+    }
+  }
+
+  &__icon {
+    font-size: 3rem;
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Light theme adjustments
+[data-theme="light"] {
+  .urdf-viewer {
+    &__canvas {
+      background: var(--bg-primary);
+    }
+  }
+}
+
+// Scrollbar styles for frames list
+.urdf-viewer__frames-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.urdf-viewer__frames-list::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+  border-radius: 3px;
+}
+
+.urdf-viewer__frames-list::-webkit-scrollbar-thumb {
+  background: var(--ide-border);
+  border-radius: 3px;
+
+  &:hover {
+    background: var(--neon);
+  }
+}
+
+// Animations
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    max-height: 200px;
+    opacity: 1;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}

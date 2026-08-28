@@ -1,0 +1,207 @@
+.robot-teleop {
+  background-color: #2d2d2d;
+  padding: 20px;
+  border-radius: 8px;
+  color: #ffffff;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.robot-teleop.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.robot-teleop h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  color: #4CAF50;
+  text-align: center;
+}
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Speed Controls */
+.speed-controls {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.speed-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.speed-control label {
+  font-size: 14px;
+  color: #ddd;
+  font-weight: 600;
+}
+
+.speed-control input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #1e1e1e;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.speed-control input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  border: none;
+}
+
+.speed-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #4CAF50;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+/* Direction Controls */
+.direction-controls {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.middle-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.control-btn {
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  border: 2px solid #444;
+  border-radius: 8px;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.control-btn:hover {
+  background-color: #3d3d3d;
+  border-color: #4CAF50;
+  transform: scale(1.05);
+}
+
+.control-btn:active,
+.control-btn.active {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+  transform: scale(0.98);
+}
+
+.control-btn.forward,
+.control-btn.backward {
+  justify-self: center;
+  width: 100px;
+}
+
+.control-btn.stop {
+  background-color: #f44336;
+  border-color: #f44336;
+  font-size: 14px;
+  color: white;
+}
+
+.control-btn.stop:hover {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.control-btn.stop:active {
+  background-color: #b71c1c;
+}
+
+/* Instructions */
+.instructions {
+  background-color: #1e1e1e;
+  padding: 15px;
+  border-radius: 6px;
+  border-left: 3px solid #4CAF50;
+}
+
+.instructions p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #4CAF50;
+}
+
+.instructions ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.instructions li {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #ddd;
+  font-family: 'Courier New', monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .robot-teleop {
+    padding: 15px;
+  }
+
+  .control-btn {
+    padding: 15px;
+    font-size: 20px;
+  }
+
+  .control-btn.forward,
+  .control-btn.backward {
+    width: 80px;
+  }
+}
+
+@media (max-width: 400px) {
+  .control-btn {
+    padding: 12px;
+    font-size: 18px;
+  }
+
+  .control-btn.forward,
+  .control-btn.backward {
+    width: 70px;
+  }
+
+  .instructions {
+    font-size: 12px;
+  }
+}

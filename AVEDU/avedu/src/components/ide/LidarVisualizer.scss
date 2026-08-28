@@ -1,0 +1,269 @@
+// components/ide/LidarVisualizer.scss
+.lidar-visualizer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(11, 16, 32, 0.8);
+  border-left: 1px solid rgba(125, 249, 255, 0.2);
+  overflow-y: auto;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(125, 249, 255, 0.2);
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--neon, #7df9ff);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__settings {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(125, 249, 255, 0.1);
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    label {
+      font-size: 11px;
+      color: rgba(230, 241, 255, 0.7);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(125, 249, 255, 0.3);
+      border-radius: 4px;
+      color: var(--foreground, #e6f1ff);
+      font-size: 13px;
+      font-family: 'Fira Code', monospace;
+
+      &:focus {
+        outline: none;
+        border-color: var(--neon, #7df9ff);
+        box-shadow: 0 0 0 2px rgba(125, 249, 255, 0.1);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    &--inline {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+
+      label {
+        flex-shrink: 0;
+        min-width: 80px;
+      }
+
+      input[type="number"] {
+        flex: 1;
+      }
+    }
+
+    &--checkbox {
+      flex-direction: row;
+      align-items: center;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        text-transform: none;
+        font-size: 13px;
+
+        input[type="checkbox"] {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
+          accent-color: var(--neon, #7df9ff);
+        }
+      }
+    }
+  }
+
+  &__unit {
+    font-size: 12px;
+    color: rgba(230, 241, 255, 0.6);
+    font-family: 'Fira Code', monospace;
+    flex-shrink: 0;
+  }
+
+  &__error {
+    margin: 0.75rem 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 92, 92, 0.1);
+    border: 1px solid rgba(255, 92, 92, 0.3);
+    border-radius: 6px;
+    font-size: 12px;
+    color: #ff8080;
+  }
+
+  &__help {
+    margin-top: 0.5rem;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Fira Code', monospace;
+
+    code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--neon, #7df9ff);
+      font-size: 10px;
+    }
+  }
+
+  &__canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    min-height: 400px;
+  }
+
+  &__canvas {
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    border: 2px solid rgba(125, 249, 255, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(125, 249, 255, 0.1);
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__stat-label {
+    font-size: 10px;
+    color: rgba(230, 241, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  &__stat-value {
+    font-size: 13px;
+    color: var(--neon, #7df9ff);
+    font-family: 'Fira Code', monospace;
+    font-weight: 600;
+  }
+
+  &__placeholder {
+    padding: 2rem;
+    text-align: center;
+    color: rgba(230, 241, 255, 0.5);
+    font-size: 13px;
+
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+
+  &__note {
+    font-size: 11px;
+    color: rgba(230, 241, 255, 0.4);
+    margin-top: 1rem;
+
+    code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--neon, #7df9ff);
+      font-size: 10px;
+    }
+  }
+}
+
+// Button styles
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--foreground, #e6f1ff);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--small {
+    padding: 0.4rem 0.75rem;
+    font-size: 11px;
+  }
+
+  &--success {
+    background: rgba(0, 255, 0, 0.15);
+    border-color: rgba(0, 255, 0, 0.4);
+    color: #00ff00;
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 255, 0, 0.25);
+      border-color: rgba(0, 255, 0, 0.6);
+    }
+  }
+
+  &--default {
+    background: rgba(255, 100, 100, 0.15);
+    border-color: rgba(255, 100, 100, 0.4);
+    color: #ff6464;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 100, 100, 0.25);
+      border-color: rgba(255, 100, 100, 0.6);
+    }
+  }
+}

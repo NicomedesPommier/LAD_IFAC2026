@@ -1,0 +1,136 @@
+// Tab bar + multi-instance terminal panes.
+
+.terminal-tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #0b1020;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.25rem 0.5rem 0;
+    background: var(--bg-primary, rgba(0, 0, 0, 0.6));
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar { height: 4px; }
+    &::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
+  }
+
+  &__tab {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem 0.4rem 0.6rem;
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(255, 255, 255, 0.55);
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    user-select: none;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    &--active {
+      background: #0b1020;
+      color: var(--neon, #7df9ff);
+      border-color: var(--border, rgba(255, 255, 255, 0.12));
+      border-bottom-color: #0b1020;
+      // Slight vertical alignment fix so the tab visually merges with the pane below.
+      margin-bottom: -1px;
+    }
+  }
+
+  &__tab-icon {
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  &__tab-label {
+    line-height: 1;
+  }
+
+  &__tab-close {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0 0.1rem;
+    margin-left: 0.1rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 3px;
+    opacity: 0.55;
+    transition: opacity 0.15s ease, background 0.15s ease;
+
+    &:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__add {
+    appearance: none;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--neon, #7df9ff);
+    padding: 0.35rem 0.5rem;
+    margin-left: 0.15rem;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: rgba(125, 249, 255, 0.1);
+    }
+  }
+
+  &__panes {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__pane {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+// Light theme
+[data-theme="light"] .terminal-tabs {
+  background: var(--bg-surface, #fff);
+
+  &__bar {
+    background: var(--bg-primary, rgba(0, 0, 0, 0.04));
+  }
+
+  &__tab {
+    color: rgba(0, 0, 0, 0.5);
+    &:hover { color: rgba(0, 0, 0, 0.85); background: rgba(0, 0, 0, 0.06); }
+    &--active {
+      background: var(--bg-surface, #fff);
+      color: var(--neon);
+      border-bottom-color: var(--bg-surface, #fff);
+    }
+  }
+}

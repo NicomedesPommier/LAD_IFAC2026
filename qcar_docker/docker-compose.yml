@@ -1,0 +1,61 @@
+services:
+  ros:
+    build: .
+    image: qcar_docker-ros
+
+    # Resource caps so a runaway inside the shared container (a student while-true
+    # loop, a busy ROS node, or a backend ros2-introspection storm) is bounded to a
+    # fraction of the host instead of taking all 24 cores / all RAM. Compose v2
+    # (`docker compose up`) honours deploy.resources.limits without Swarm.
+    # Tuned per-environment — k8s/deployment-ros.yaml sets its own (lower) limits.
+    deploy:
+      resources:
+        limits:
+          cpus: "8.0"          # ~1/3 of a 24-core host; tune per machine
+          memory: 8G
+          pids: 512            # fork-bomb guard for the shared shell
+        # GPU acceleration for Gazebo rendering — uncomment if a GPU is available.
+        # WSL GPU passthrough is flaky, so this stays off by default.
+        # reservations:
+        #   devices:
+        #     - driver: nvidia
+        #       count: all
+        #       capabilities: [gpu, compute, utility]
+
+    ports:
+      - "9090:9090"  # rosbridge
+      - "7000:7000"  # estático (URDF/meshes)
+      - "8080:8080"  # WVS (solo si lo activas)
+      - "10000:10000"  # ROS-TCP-Endpoint for Unity
+      # - "11345:11345" # Gazebo master — not needed without Gazebo
+    environment:
+      # Bug fix: no quotes around the value — Docker takes them literally
+      - CORS_ALLOW_ORIGIN=*
+      - ENABLE_JSP=1
+      - ENABLE_ROSAPI=1
+      - ENABLE_WVS=0                 # No Gazebo cameras in browser-sim mode
+      - ENABLE_TURTLESIM=0
+      - ENABLE_GAZEBO=0              # MUST be 0: Gazebo publishes /clock which freezes
+                                     # use_sim_time for every node when Gazebo exits
+      - ENABLE_DUMMY_CAMERAS=0
+      - ENABLE_UNITY_TCP=0           # Not needed for browser sim
+      - UNITY_TCP_PORT=10000
+      - BROWSER_SIM=1               # Use launch_browser_sim.py (minimal, no Gazebo)
+      - IP_CONFIG_PATH=/config/ip_config.json
+      - DISPLAY=${DISPLAY}           # X11 display for Gazebo GUI
+      - QT_X11_NO_MITSHM=1           # Fix Qt shared memory issues
+      - GAZEBO_WORLD=/worlds/qcar_lidar_test.world  # Specify the world file
+    volumes:
+      - ../config/ip_config.json:/config/ip_config.json:ro
+      - user_workspaces:/workspaces  # Persistent volume for user IDE workspaces
+      - ./worlds:/worlds:ro          # Gazebo world files for simulations
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # X11 socket for GUI display
+      - $HOME/.Xauthority:/root/.Xauthority:ro  # X11 authentication
+#    devices:
+#      - /dev/dri:/dev/dri  # GPU devices for hardware acceleration
+    privileged: false  # Not needed with specific device mapping
+
+volumes:
+  user_workspaces:
+    driver: local
+

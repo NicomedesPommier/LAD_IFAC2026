@@ -1,0 +1,21 @@
+# =============================================================================
+# L.A.D. Backend Service
+# Django REST API service
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: lad-backend
+  namespace: lad
+  labels:
+    app.kubernetes.io/name: lad
+    app.kubernetes.io/component: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: lad-backend
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+      protocol: TCP
